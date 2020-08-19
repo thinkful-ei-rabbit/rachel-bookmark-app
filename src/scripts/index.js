@@ -5,7 +5,9 @@ import store from './store';
 import '../index.css';
 
 function main() {
-    console.log(store.adding);
+    console.log(store.store.adding);
+    console.log(7);
+    console.log();
     bookmarks.generateListView();
 
 }

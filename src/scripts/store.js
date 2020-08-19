@@ -50,7 +50,8 @@ store = {
 }
 
 */
-
+const num = 8; 
 export default{
-  store
+  store,
+  num
 };

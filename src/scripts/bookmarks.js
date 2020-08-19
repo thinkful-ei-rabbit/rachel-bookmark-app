@@ -14,20 +14,17 @@ import store from './store';
 
 const generateTitle = (() => {
     const title = '<h1>Bookmarks</h1>';
+    return title;
 });
 
 const generateAddButton = function () {
-    //create button that calls function to switch html to
-    //adding page
-    //render to page somehow
-    //call render from here? 
+    const add = '<button type="button" class = "start button"> + </button>';
+    return add;
 };
 
 const generateFilterButton = function () {
-    //creates a button that returns a function (filter)
-    //that filters items through click on hidden drop-down
-    //remove class hidden from menu
-    //in CSS this should show on hover as well
+    const filter = '<button type="button" class="button filter">Filter</button><ul class="hidden"><li>*</li><li>**</li><li>***</li><li>****</li><li>*****</li></ul>';
+    return filter;
 };
 
 
@@ -36,19 +33,20 @@ const generateFilterButton = function () {
 //when hidden is removed change flex of place
 const generateBookmarks = function () {
     const bookmarks = [];
-    console.log(store.bookmarks);
-    const bookmarkHtml = store.bookmarks.forEach(bookmark => {
-
-        let html = `<section><div><h3>${this.title}</h3><span>${this.rating}</span></div>
+    const bookmarkHtml = store.store.bookmarks.forEach(bookmark => {
+        let html = `<section><div><h3>${bookmark.title}</h3><span>${bookmark.rating}</span></div>
     <div class='hidden'>
-        <a href = ${this.link}>
+        <a href = ${bookmark.link}>
             <button class = 'visit' type = 'button'>Visit site</button>
         </a>
-        <div class='description'><p>${this.description}</p></div>
+        <div class='description'><p>${bookmark.description}</p></div>
     </div></section>`;
         bookmarks.push(html);
 
     });
+   const htmlString = bookmarks.join(',');
+   const html = `<main>${htmlString}</main>`;
+   return html;
 
 };
 
@@ -62,6 +60,7 @@ const generateListView = function(){
     const title = generateTitle();
     const add = generateAddButton();
     const filter = generateFilterButton();
+    console.log(filter);
 
     const header = `<header>${title}<div class ='header-buttons'>${add}${filter}</div>
     </header>`;
