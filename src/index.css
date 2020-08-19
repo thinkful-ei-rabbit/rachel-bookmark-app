@@ -1,14 +1,17 @@
 *{
     box-sizing: border-box;
+    padding: 0;
+    margin: 0;
 }
 
 body{
-    padding: 0;
-    margin: 0;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: hsl(198, 100%, 50%);
+    color: #020202
 }
 
 main{
@@ -18,3 +21,61 @@ main{
     align-items: center;
 }
 
+main .bookmark-section{
+    width: 60vw;
+    height: 100%;
+}
+
+main section div > *{
+    margin: 5px 3px;
+}
+
+main .bookmark-section .hidden{
+  display: none;
+
+}
+
+main section .collapsed{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+main section .bookmark-full{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: inherit;
+}
+
+header div ul{
+    list-style: none;
+   
+
+}
+header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+header .header-button{
+    display: flex; 
+    flex-direction: row;
+    width: inherit;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+ button{
+    margin: 1rem;
+    width: 85px;
+    height: 35px;
+    
+}
+
+header div .hidden{
+  display: none;
+}
