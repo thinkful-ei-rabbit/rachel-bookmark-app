@@ -39,10 +39,12 @@ main section div > *{
     margin: 5px 3px;
 }
 
-main .bookmark-section .hidden{
-  display: none;
-
+main section{
+    border: 1px solid #020202;
+    margin: 1em;
 }
+
+
 
 main section .collapsed{
     display: flex;
@@ -67,15 +69,22 @@ header div ul{
 header{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    height: inherit;
 }
 header .header-button{
     display: flex; 
     flex-direction: row;
-    width: inherit;
+    width: 80vw;
     justify-content: space-between;
     align-items: flex-end;
+}
+header .drop-down{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
  button{
@@ -83,8 +92,4 @@ header .header-button{
     width: 85px;
     height: 35px;
     
-}
-
-header .hidden{
-  display: none;
 }

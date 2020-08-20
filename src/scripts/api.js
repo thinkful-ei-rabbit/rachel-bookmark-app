@@ -3,8 +3,8 @@ const BASE_URL = 'https://thinkful-list-api.herokuapp.com/rachel/bookmarks'
 //READ
 const getBookmark = (() => fetch(BASE_URL));
 
+const getLink = ((url) => fetch(url));
 
-//CREATE
 const createBookmark = (name => {
     const newBookmark = JSON.stringify({ name });
     console.log(newBookmark);
@@ -33,6 +33,7 @@ const updateBookmark = ((id, updateData) => {
 
 
 //DELETE FUNCTION
+//write delete function
 
 
 
@@ -40,6 +41,7 @@ const updateBookmark = ((id, updateData) => {
 
 export default {
     getBookmark,
+    getLink,
     createBookmark,
     updateBookmark,
 }

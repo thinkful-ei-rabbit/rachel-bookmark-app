@@ -1,22 +1,9 @@
 import $ from 'jquery';
 import store from './store';
+import api from './api'
+import item from './item';
 
-
-//check html and merge css
-//add stars
-//write function that gets the stars from the store
-//store.
-//give stars id that highlights the right amount of start. 
-
-
-
-//create html for each page in generate functions
-//generate title in one function
-//generate bookmarks
-//how do I get these to drop down in the html?
-//generate add button 
-//generate filter button 
-
+//GENERATE BUTTONS AND HEADER CONTENT
 const generateTitle = (() => {
     const title = '<h1>Bookmarks</h1>';
     return title;
@@ -27,21 +14,25 @@ const generateAddButton = function () {
     return add;
 };
 
-//figure out how to fill in one, two, three etc stars
-const generateFilterButton = function () {
-    const filter = `<button type="button" class="button filter">Filter</button>
-    <ul class="hidden">
-    <li><li><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></li>
-    <li><li><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></li>
-    <li><li><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></li>
-    <li><li><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></li>
-    <li><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></li></ul>`;
+const generateFilterWithDropDown = function () {
+    const filter = 
+    `<div class = 'drop-down'><button type="button" class="button filter">Filter</button>
+    <ul class="dropdown">
+    <li class = 'one-star'><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></li>
+    <li class = 'two-star'><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></li>
+    <li class = 'three-star'><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></li>
+    <li class = 'four-star'><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></li>
+    <li class = 'five-star'><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></li>
+    </ul></div>`;
+
     return filter;
 };
 
-const generateDeleteButton = function () {
-    const del = '<button type="button" class = "add delete button">Delete</button>';
-    return del;
+const generateFilterButton = function () {
+    const filter = `
+        <button type="button" class="button filter">Filter</button>
+        `;
+    return filter;
 };
 
 const generateSubmitButton = function () {
@@ -54,77 +45,44 @@ const generateCxlButton = function () {
     return cxl;
 };
 
-const addPage = function (){
+const generateDeleteButton = function () {
+    const del = '<button type="button" class = "add delete button">Delete</button>';
+    return del;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//COMBINES PIECES AND RUNS RENDER
+const addPage = function () {
     const title = generateTitle();
     const cxl = generateCxlButton();
     const submit = generateSubmitButton();
 
     const header = `${title}<div class ='header-buttons'>${cxl}${submit}</div>`;
 
+    const del = generateDeleteButton();
     const form = generateForms();
 
-    render(header, form);
+    const html = `${form}${del}`;
+
+    render(header, html);
 }
 
-
-
-//this function should run on page load
-//when hidden is removed change flex of place
-const generateBookmarks = function () {
-    const bookmarks = [];
-    //make function to make star rating variable, not static
-
-    const bookmarkHtml = store.store.bookmarks.forEach(bookmark => {
-
-//ADD CONDITIONAL TEXT CHECKING IF EXPANDED = FALSE
-//IF TRUE, ADD REGULAR HTML
-//IF FALSE RUN EXPANDED HTML
-        let html = `
-        <section class = "bookmark-section">
-            <div class = 'collapsed bookmark'>
-            <h3>${bookmark.title}</h3>
-                <div class="rating">
-                    <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
-                </div>
-            </div>
-            
-            <div class= "hidden bookmark-full">
-                <a href = ${bookmark.link}>
-                <button class = 'visit' type = 'button'>Visit site</button>
-                </a>
-            <div class='description'><p>${bookmark.description}</p></div>
-        </div>
-        </section>`;
-
-        bookmarks.push(html);
-
-    });
-   const htmlString = bookmarks.join('');
-   const html = `<main>${htmlString}</main>`;
-   return html;
-
-};
-
-
-const generateListView = function(){
-    const title = generateTitle();
-    const add = generateAddButton();
-    const filter = generateFilterButton();
-
-    const header = `${title}<div class ='header-buttons'>${add}${filter}</div>`;
-    const bookmarks = generateBookmarks();
-  
-    render(header, bookmarks);
-};
-
-
-const render = ((header, main)=> {
-    $('header').html(header);
-    $('main').html(main);
-});
-
-
-const generateForms = function(){
+//generateFORMS for addPage
+const generateForms = function () {
     const forms = ` <form>
     <label>Add a new bookmark</label>
     <input type="text" name="link-address" class="input-link">
@@ -140,117 +98,145 @@ const generateForms = function(){
         </form>
     </div>
 </section>`;
-return forms;
+    return forms;
 }
-//list from filter needs to show too
-//remove a class of hidden from the ul
-//does it have an id??
 
 
-const expanded = function(){
-    const shown = [];
-    const filtered = store.store.bookmarks.forEach(function(bookmark){
-        if (bookmark.expanded === true){
 
+
+//generates bookmarks
+//add conditional based on store.store.bookmarks[x].expanded === true
+//render those differently
+//add this inside forEach loop, running function that generates open 
+//html and adds to 
+const generateBookmarks = function () {
+    const bookmarks = [];
+    store.store.bookmarks.forEach(bookmark => {
+    const html = `
+        <section class = "bookmark-section">
+            <div class = 'collapsed bookmark'>
+            <h3>${bookmark.title}</h3>
+                <div class="rating">
+                    <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+                </div>
+            </div>`;
+
+        if (bookmark.expanded === false) {
+            const closedBookmark = `${html}</section>`;
+            bookmarks.push(closedBookmark); 
+        } else {
+            console.log(bookmark.url);
+            const link = bookmark.link;
+            const getLink = api.getLink(link);
+            const expanded = `<div class= "bookmark-full">
+               <a target = "_blank" href=${bookmark.url}><button class = 'visit' type = 'button'>Visit site</button></a>
+            <div class='description'><p>${bookmark.description}</p></div>
+        </div>
+        </section>`;
+
+            const expandedBookmark = `${html}${expanded}`;
+            bookmarks.push(expandedBookmark);
+            
         }
-    })
-    //store.store.bookmark
+
+    });
+    const htmlString = bookmarks.join('');
+    return htmlString;
+    //ADD EVENT HANDLER THAT TOGGLES BOOKMARK.EXPANDED 
+};
+
+
+//make speperate function and event handler for 
+//taking in the visit button
+//calling api.getLink with link from forEach
+//this.link
+
+//generates main view with list of bookmarks
+const generateListView = function () {
+    const title = generateTitle();
+    const add = generateAddButton();
+    let filter = "";
+    
+        if (store.showDropDown === false){
+            filter = generateFilterWithDropDown();
+        } else {
+            filter = generateFilterButton();
+        };
+
+    const header = `${title}<div class ='header-buttons'>${add}${filter}</div>`;
+    const bookmarks = generateBookmarks();
+
+    render(header, bookmarks);
+};
+
+const openLink = function(event){
+    //get link of item by finding where to get item
+    //api.getLink(link)
+}
+//render function that renders header and main seperately
+const render = ((header, main) => {
+    $('header').html(header);
+    $('main').html(main);
+});
+
+
+
+ $('header').on('click', '.filter', event =>{
+     console.log(store.showDropDown);
+        store.showDropDown = !store.showDropDown;
+        generateListView();    
+    });
+
+//$('main').on('click', '.visit', );
+//get this to work with link that calls 
+//api.getLink(this.link)
+
+
+
+
+const toggleExpanded = function(event){
+    //how to target specific section
+    //switch expanded in stire
+    //
 }
 
 
 
-//FUNCTION ON CLICK + BUTTON
-//get header, switch plus to x
-//get add button
-//get generateForms
-//get delete button
 
-//render to page
-
-
-//FUNCTION TAKES IN VALUES OF CLICKS AND UPFATES STORE
-//makes new object from 
-
-
-const clickToggleOpen = function(){
-    //get section tag and toggle hidden on 
-    //class of div beneath title and rating
-    //forEach bookmark if 
-    //if store.store.bookmarks.id === id
-    //this.expanded = true;
-
-
-}
-
-//on clicking puls button, render whole new page to the main
-//taking over the whole view except
-//change background color??
-
-
-const newBookmarkForm = function (){
-
-}
-
-
-
-
-
-
-
-
-
-
-
-const bindEventListeners = function (){
-
-
-
-
-
-
-
-
+const bindEventListeners = function () {
+    handleFilterToggle();
 
     //EVENTS
     //click store.store.expanded = true; 
-        //then remove class of hidden in this function
+    //then remove class of hidden in this function
 
     //click stars and sort
     //FUNCTION TO SORT
-        //forEach(bookmark){
-            //if bookmark.rating < variable (of the value captured)
-            //how do I capture this value like a form? 
-            //add id for each
-             //const shown = []
-             //add and render, replacing current
-     
-             
+    //forEach(bookmark){
+    //if bookmark.rating < variable (of the value captured)
+    //how do I capture this value like a form? 
+    //add id for each
+    //const shown = []
+    //add and render, replacing current
+
+
 
     //make new page with form when plus is clicked
     //switch + to x transition in css and change other 
     //button to delete
     //form in place of main
-
-
 };
 
-//function that calls addPage
-//renders add page on click of plus button
-$('header').on('click', '#add',  addPage);
-//renders list view back on x
+const toAddPage = function (){
+
+}
+const handleAddPage = function (){
+
+}
+$('header').on('click', '#add', addPage);
 $('header').on('click', '#cxl', generateListView);
 
-//when the div of an item is clicked, it should call
-//a function that updates the store with class true
-//forEach loop to find them 
-
-
-//this should be tied together with header in function
-//that renders html main differently
-
-//SHOULD SWITCH VALUE OF STORE EVERY TIME AND THEN CALL 
-//FUNC THAT BUILDS MAIN PAGE
-
+$('main').on('click', 'section', toggleExpanded);
 
 
 
@@ -259,3 +245,31 @@ export default {
     render,
     bindEventListeners
 };
+
+//NEXT STEPS
+//ADD EVENT LISTENER TO DIV THAT TOGGLES OPEN AND CLOSED
+
+//FIGURE OUT HOW TO DO THE SAME WITH THE STARS
+//on the filter button
+//write function that filters by number of stars or greater
+//fill in the stars at the top of the screen
+//remove class of hidden on click
+
+//write function that takes star rating from the number in STORE.js 
+//fills in that amount of stars
+//by adding css class to stars
+//for loop for i=0; i<rating; i++
+//add class to span???
+
+//make sure store matches api
+
+//add functionality to form
+//get value for url input
+//send to store
+//send to api
+//render on page
+
+//add functionality to second form 
+
+//add delete button beneath form 
+
