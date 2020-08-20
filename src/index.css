@@ -19,6 +19,15 @@ main{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    
+}
+
+main form{
+    margin-bottom: 20px;
+}
+
+h1{
+    margin-top: 6%;
 }
 
 main .bookmark-section{
@@ -76,6 +85,6 @@ header .header-button{
     
 }
 
-header div .hidden{
+header .hidden{
   display: none;
 }
