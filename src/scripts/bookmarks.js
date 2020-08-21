@@ -23,11 +23,11 @@ const generateFilterWithDropDown = function () {
     const filter =
         `<div class = 'drop-down'><button type="button" class="button filter">Filter</button>
     <ul class="dropdown">
-    <li class = 'one-star rating'><span class = 'fill'>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></li>
-    <li class = 'two-star rating'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span>☆</span><span>☆</span><span>☆</span></li>
-    <li class = 'three-star rating'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span>☆</span><span>☆</span></li>
-    <li class = 'four-star rating'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span>☆</span></li>
     <li class = 'five-star rating'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class='fill'>☆</span></li>
+    <li class = 'four-star rating'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'empty'>☆</span></li>
+    <li class = 'three-star rating'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span></li>
+    <li class = 'two-star rating'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span></li>
+    <li class = 'one-star rating'><span class = 'fill'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span></li>
     </ul></div>`;
 
     return filter;
@@ -74,20 +74,21 @@ const generateDeleteButton = function () {
 const addPage = function () {
     const title = generateTitle();
     const cxl = generateCxlButton();
-    const submit = generateSubmitButton();
 
-    const header = `${title}<div class ='header-buttons'>${cxl}${submit}</div>`;
-
-    const del = generateDeleteButton();
+    const header = `${title}<div class ='header-buttons'>${cxl}</div>`;
     const form = generateForms();
 
-    const html = `${form}${del}`;
-
+    const html = `${form}`;
+    
     render(header, html);
 }
 
 //generateFORMS for addPage
 const generateForms = function () {
+    //add submit and delete to form function
+    const cxl = generateCxlButton();
+    const submit = generateSubmitButton();
+
     const forms = ` <form>
     <div class = 'form-item'>
     <label for="name">Title:</label>
@@ -104,7 +105,8 @@ const generateForms = function () {
         </div>
         </div>
     <input type="text" id="description" name="description" class="input-description" placeholder="Add a description of your bookmark (optional)">
-    
+   <div class = "row">${cxl}${submit}</div>
+
 </form>
 
     
@@ -112,19 +114,19 @@ const generateForms = function () {
     return forms;
 }
 
-const submit = function(){
+const submit = function () {
     const title = $('#title').val();
     const rating = $('#rating').val();
     const url = $('#url').val();
     const description = $('#description').val();
-//api.validateUrl(url)
+    //api.validateUrl(url)
 
 }
 
 
 
 
-const handleAddBookmarkSubmit = function() {
+const handleAddBookmarkSubmit = function () {
     $('main').on('submit', 'input', submit);
     $('header').on('click', '.submit', submit);
 }
@@ -176,8 +178,9 @@ const generateBookmarks = function () {
             bookmarks.push(closedBookmark);
         } else {
             const expanded = `<div class= "bookmark-full">
-               <a target = "_blank" href=${bookmark.url}><button class = 'visit' type = 'button'>Visit site</button></a>
             <div class='description'><p>${bookmark.description}</p></div>
+               <a target = "_blank" href=${bookmark.url}><button class = 'visit' type = 'button'>Visit site</button></a>
+            
         </div></div>
         </section>`;
 
@@ -196,7 +199,7 @@ const generateBookmarks = function () {
 const generateStarRating = function (num) {
 
     const starFilled = '<span class = "fill">☆</span>';
-    const starEmpty = '<span>☆</span>';
+    const starEmpty = '<span class = "empty">☆</span>';
     let rating = '';
     switch (num) {
         case 1:
@@ -269,9 +272,9 @@ const render = ((header, main) => {
 //EXPERIMENTAL
 
 const getIdFromBookmark = function (bookmark) {
-
+console.log(bookmark);
     const h = $(bookmark)
-        .closest('')
+        .closest('.')
         .data('id');
 
     console.log(h);
@@ -308,7 +311,6 @@ getIdFromBookmark(store.store.bookmarks[0]);
 
 //event listner to toggle dropdown
 $('header').on('click', '.filter', event => {
-    console.log(store.showDropDown);
     store.showDropDown = !store.showDropDown;
     generateListView();
 });
@@ -343,7 +345,7 @@ const bindEventListeners = function () {
     //add and render, replacing current
 
 
-handleAddBookmarkSubmit();
+    handleAddBookmarkSubmit();
     //make new page with form when plus is clicked
     //switch + to x transition in css and change other 
     //button to delete

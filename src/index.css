@@ -77,6 +77,11 @@ main form input{
     background-color: hsl(90, 95%, 95%);
     color: hsl(180, 65%, 15%);
     border: 1px solid hsl(180, 65%, 15%);
+    align-self: flex-end;
+}
+
+main form label{
+    width: 65px;
 }
 
 main form .form-item{
@@ -102,9 +107,8 @@ header{
 header div{
     display: flex; 
     flex-direction: row;
-    width: inherit;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     padding: 0;
     margin: 0;
 }
@@ -118,14 +122,15 @@ header .drop-down{
 }
 
 header .drop-down .dropdown{
-    z-index: 1;
+    z-index: 20;
     border: 1px solid hsl(90, 80%, 20%);
     width: 85px;
     padding: 2px;
     margin: 0;
-    background-color: #CCFFFF
+    background-color: #CCFFFF;
 
 }
+
 
  button{
     margin: 1rem 2rem 0.3rem;
@@ -142,14 +147,13 @@ header .drop-down .dropdown{
     align-self: center;
     
 }
+header #add{
+    align-self: flex-start;
+}
 
 main button:active{
     border: none;
     outline: none;
-}
-
-button:focus{
-    outline-offset: -4px;
 }
 
  .rating > .fill:before {
@@ -158,6 +162,13 @@ button:focus{
     color: #CCFF66;
  }
 
+
+ .rating > .empty:before {
+    content: "\2605";
+    position: absolute;
+    color: hsl(180, 100%, 95%);
+    z-index: -1;
+ }
 
  .rating > .fill{
      color: #CCFF66;
