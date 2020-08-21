@@ -1,6 +1,6 @@
 import cuid from 'cuid';
 
-const showDropDown = false;
+const showDropDown = true;
 const store = {
     
     bookmarks: [

@@ -15,7 +15,7 @@ const generateTitle = (() => {
 });
 
 const generateAddButton = function () {
-    const add = '<button type="button" class = "button" id="add"> + </button>';
+    const add = '<button type="button" class = "button add-button" id="add"> + </button>';
     return add;
 };
 
@@ -89,15 +89,20 @@ const addPage = function () {
 //generateFORMS for addPage
 const generateForms = function () {
     const forms = ` <form>
-    <label for="name">Title</label>
+    <div class = 'form-item'>
+    <label for="name">Title:</label>
     <input id="name" type="text" name="name" class="input-name" required />
-    <label for="url">Url</label>
+    </div>
+    <div class = 'form-item'>
+    <label for="url">Url:</label>
     <input type="text" id="url" name="url" class="input-url" required />
-    <h3>link name</h3>
+    </div>
+    <div class = 'form-item'>
+    <lable for="rating">Rating:</lable>
     <div class="rating">
         <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
         </div>
-
+        </div>
     <input type="text" id="description" name="description" class="input-description" placeholder="Add a description of your bookmark (optional)">
     
 </form>
@@ -108,10 +113,10 @@ const generateForms = function () {
 }
 
 const submit = function(){
-    const title = "" ;
-    const rating = "";
-    const url = "";
-    const description = "";
+    const title = $('#title').val();
+    const rating = $('#rating').val();
+    const url = $('#url').val();
+    const description = $('#description').val();
 //api.validateUrl(url)
 
 }
