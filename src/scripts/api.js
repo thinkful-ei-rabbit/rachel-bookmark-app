@@ -6,15 +6,17 @@ const getBookmark = (() => fetch(BASE_URL));
 //CHECK BOOKMARK VALIDIDTY THROUGH TEXTING UPI
 
 const validateUrl = (url => {
+    console.log(url)
     return fetch(url)
-        .then(res => {
+        .then(res => res(json())
+        .then(data => console.log(data))
+        .then(res =>{
             if (res.ok) {
                 console.log('Valid url')
             } else {
                 console.log('notValid')
             }
         })
-        .then(data => console.log(data))
         .catch(error => console.log(error))
 });
 

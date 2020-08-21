@@ -220,19 +220,37 @@ const render = ((header, main) => {
 
 
 
+const submit = function (event){
+    const arr = ($(event.target).serializeArray());
+    console.log(arr);
+    event.preventDefault();
 
+    const url = arr[1].value;
+    api.validateUrl(url);
 
+    const title = arr[0].value;
+    const description = arr[3].value;
 
-const handleAddBookmarkSubmit = function () {
-    $('main').on('submit', 'input', submit);
-    $('header').on('click', '.submit', submit);
+    const obj = store.create(title, url, description);
+console.log(obj);
+    
+    
 }
-
-
+$('main').submit('form', submit);
 /*$( "form" ).submit(function( event ) {
   console.log( $( this ).serializeArray() );
   event.preventDefault();
 });
+
+from api.js
+ .then(res =>{
+            if (res.ok) {
+                console.log('Valid url')
+            } else {
+                console.log('notValid')
+            }
+        })
+        
 
 
 const submit = function () {
@@ -243,6 +261,39 @@ const submit = function () {
     //api.validateUrl(url)
 
 }*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

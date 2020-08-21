@@ -58,11 +58,11 @@ const findAndUpdate = function (id, newData){
   Object.assign(currentBookmark, newData);
 }
 
-const create =  function(title, rating, url, description){
+const create =  function(title, url, description){
   return {
     id: cuid(),
     title,
-    rating,
+    rating: 4,
     url,
     description,
     expanded: false
