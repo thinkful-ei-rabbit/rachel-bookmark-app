@@ -23,11 +23,11 @@ const generateFilterWithDropDown = function () {
     const filter =
         `<div class = 'drop-down'><button type="button" class="button filter">Filter</button>
     <ul class="dropdown">
-    <li class = 'five-star rating'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class='fill'>☆</span></li>
-    <li class = 'four-star rating'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'empty'>☆</span></li>
-    <li class = 'three-star rating'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span></li>
-    <li class = 'two-star rating'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span></li>
-    <li class = 'one-star rating'><span class = 'fill'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span></li>
+    <li class = 'five-star rating drop-down-five drop-down-item'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class='fill'>☆</span></li>
+    <li class = 'four-star rating drop-down-four drop-down-item'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'empty'>☆</span></li>
+    <li class = 'three-star rating drop-down-three drop-down-item'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span></li>
+    <li class = 'two-star rating drop-down-two drop-down-item'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span></li>
+    <li class = 'one-star rating drop-down-one drop-down-item'><span class = 'fill'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span></li>
     </ul></div>`;
 
     return filter;
@@ -41,7 +41,7 @@ const generateFilterButton = function () {
 };
 
 const generateSubmitButton = function () {
-    const submit = '<button type="submit" class = "submit button">Submit</button>';
+    const submit = '<input type="submit" class = "submit button">';
     return submit;
 };
 
@@ -64,12 +64,6 @@ const generateDeleteButton = function () {
 
 
 
-
-
-
-
-
-
 //COMBINES PIECES AND RUNS RENDER
 const addPage = function () {
     const title = generateTitle();
@@ -79,13 +73,12 @@ const addPage = function () {
     const form = generateForms();
 
     const html = `${form}`;
-    
+
     render(header, html);
 }
 
 //generateFORMS for addPage
 const generateForms = function () {
-    //add submit and delete to form function
     const cxl = generateCxlButton();
     const submit = generateSubmitButton();
 
@@ -113,28 +106,6 @@ const generateForms = function () {
 </section>`;
     return forms;
 }
-
-const submit = function () {
-    const title = $('#title').val();
-    const rating = $('#rating').val();
-    const url = $('#url').val();
-    const description = $('#description').val();
-    //api.validateUrl(url)
-
-}
-
-
-
-
-const handleAddBookmarkSubmit = function () {
-    $('main').on('submit', 'input', submit);
-    $('header').on('click', '.submit', submit);
-}
-
-/*$( "form" ).submit(function( event ) {
-  console.log( $( this ).serializeArray() );
-  event.preventDefault();
-});*/
 
 
 
@@ -165,8 +136,8 @@ const generateBookmarks = function () {
     store.store.bookmarks.forEach(bookmark => {
         const rating = generateStarRating(bookmark.rating);
         const html = `
-        <section class = "bookmark-section">
-           <div class = "js-bookmark-each" data-id = "${bookmark.id}"> <div class = 'collapsed bookmark'>
+        <section class = "bookmark-section" >
+           <div data-id="${bookmark.id}" class = "js-bookmark-each" > <div class = 'collapsed bookmark'>
             <h3>${bookmark.title}</h3>
                 <div class="rating">
                    ${rating}
@@ -179,7 +150,7 @@ const generateBookmarks = function () {
         } else {
             const expanded = `<div class= "bookmark-full">
             <div class='description'><p>${bookmark.description}</p></div>
-               <a target = "_blank" href=${bookmark.url}><button class = 'visit' type = 'button'>Visit site</button></a>
+               <a target = "_blank" href=${bookmark.url}><button class = 'visit button' type = 'button'>Visit site</button></a>
             
         </div></div>
         </section>`;
@@ -192,7 +163,6 @@ const generateBookmarks = function () {
     });
     const htmlString = bookmarks.join('');
     return htmlString;
-    //ADD EVENT HANDLER THAT TOGGLES BOOKMARK.EXPANDED 
 };
 
 
@@ -225,29 +195,6 @@ const generateStarRating = function (num) {
 };
 
 
-//START FUNCTIONS THAT WORK WITH FORM ELEMENTS AND EVENTS
-//make favroty function that takes in values and pushes
-//to store.store.bookmarks
-//store.create()
-//store.addBookmark();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -271,16 +218,35 @@ const render = ((header, main) => {
 
 //EXPERIMENTAL
 
-const getIdFromBookmark = function (bookmark) {
-console.log(bookmark);
-    const h = $(bookmark)
-        .closest('.')
-        .data('id');
 
-    console.log(h);
-};
 
-getIdFromBookmark(store.store.bookmarks[0]);
+
+
+
+const handleAddBookmarkSubmit = function () {
+    $('main').on('submit', 'input', submit);
+    $('header').on('click', '.submit', submit);
+}
+
+
+/*$( "form" ).submit(function( event ) {
+  console.log( $( this ).serializeArray() );
+  event.preventDefault();
+});
+
+
+const submit = function () {
+    const title = $('#title').val();
+    const rating = $('#rating').val();
+    const url = $('#url').val();
+    const description = $('#description').val();
+    //api.validateUrl(url)
+
+}*/
+
+
+
+
 
 
 
@@ -317,39 +283,22 @@ $('header').on('click', '.filter', event => {
 
 
 
+//toggles bookmarks open and shut
+const handleBookmarkToggle = function (event) {
+    const e = $(event.target).closest('.js-bookmark-each').data('id');
+    const toggle = store.store.bookmarks.find(bookmark => (bookmark.id === e));
 
-$('main').on('click', '.bookmark-section', event => {
-    let id = getIdFromBookmark();
-    console.log(id);
-    let bookmark = store.findById(id);
+    if (toggle.expanded === true) {
+        toggle.expanded = false;
+    } else { toggle.expanded = true };
+    generateListView();
 
-    console.log(bookmark);
-
-})
-
+};
 
 const bindEventListeners = function () {
-    // handleFilterToggle();
-
-    //EVENTS
-    //click store.store.expanded = true; 
-    //then remove class of hidden in this function
-
-    //click stars and sort
-    //FUNCTION TO SORT
-    //forEach(bookmark){
-    //if bookmark.rating < variable (of the value captured)
-    //how do I capture this value like a form? 
-    //add id for each
-    //const shown = []
-    //add and render, replacing current
 
 
     handleAddBookmarkSubmit();
-    //make new page with form when plus is clicked
-    //switch + to x transition in css and change other 
-    //button to delete
-    //form in place of main
 };
 
 const toAddPage = function () {
@@ -361,7 +310,7 @@ const handleAddPage = function () {
 $('header').on('click', '#add', addPage);
 $('header').on('click', '#cxl', generateListView);
 
-
+$('main').on('click', '.bookmark-section', handleBookmarkToggle);
 
 
 export default {
@@ -370,30 +319,23 @@ export default {
     bindEventListeners
 };
 
-//NEXT STEPS
-//ADD EVENT LISTENER TO DIV THAT TOGGLES OPEN AND CLOSED
 
-//FIGURE OUT HOW TO DO THE SAME WITH THE STARS
-//on the filter button
-//write function that filters by number of stars or greater
-//fill in the stars at the top of the screen
-//remove class of hidden on click
 
-//write function that takes star rating from the number in STORE.js 
-//fills in that amount of stars
-//by adding css class to stars
-//for loop for i=0; i<rating; i++
-//add class to span???
 
-//make sure store matches api
 
-//add functionality to form
-//get value for url input
-//send to store
-//send to api
-//render on page
+//switching button to submit
+//event.preventdefault
+//handle form by serialize array
+//run fuction that tests url
+    //api.js
 
-//add functionality to second form 
+//post to url
+//parse url and do with factory function
+    //store.js
 
-//add delete button beneath form 
 
+
+
+
+
+//after break, serialize form and start working with the APIS

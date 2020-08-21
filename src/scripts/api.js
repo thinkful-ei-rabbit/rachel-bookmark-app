@@ -6,9 +6,18 @@ const getBookmark = (() => fetch(BASE_URL));
 //CHECK BOOKMARK VALIDIDTY THROUGH TEXTING UPI
 
 const validateUrl = (url => {
-        return fetch(url);
+    return fetch(url)
+        .then(res => {
+            if (res.ok) {
+                console.log('Valid url')
+            } else {
+                console.log('notValid')
+            }
+        })
+        .then(data => console.log(data))
+        .catch(error => console.log(error))
 });
-//ifresponse ok
+
 
 const createBookmark = (name => {
     const newBookmark = JSON.stringify({ name });
@@ -19,13 +28,16 @@ const createBookmark = (name => {
             'Content-Type': 'application/json'
         },
         body: newBookmark
-    });
+    })
+        .then(res => res.json())
+        .then(data => data())
+
 });
 
 
 //UPDATE
 const updateBookmark = ((id, updateData) => {
-    const newData = JSON.stringify({ updateData0});
+    const newData = JSON.stringify({ updateData });
     return fetch(BASE_URL, {
         method: 'PATCH',
         headers: {

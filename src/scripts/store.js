@@ -10,7 +10,7 @@ const store = {
         rating: 5,
         url: 'https://cafedelites.com/chicken-cacciatore/',
         description: 'Chicken and vegetables cooked in a red wine tomato sauce',
-        expanded: true
+        expanded: false
       },
       {
         id: '6ffw',
@@ -18,7 +18,7 @@ const store = {
         rating: 5,
         url: 'https://natashaskitchen.com/baked-asparagus-with-lemon-butter-and-parmesan/',
         description: 'Baked asparagus with lemon and parmesean',
-        expanded: true
+        expanded: false
       },
       {
         id: '7ddr',
@@ -69,16 +69,6 @@ const create =  function(title, rating, url, description){
   }
 }
 
-//call in bookmark js and send to push function here
-//function validate url = fetch url and check if 200
-//else prevent resubmission
-
-
-
-
-
-
-
 export default{
   store,
   addBookmark,
@@ -87,3 +77,35 @@ export default{
   showDropDown,
   create
 };
+
+//TOMORROW
+//wrap text feilds
+//rating in form can be dupicated in add 
+//with dropdown stars
+
+//check url before adding to store.store.bookmarks
+//.then 
+//run function that adds bookmark to store
+//.then 
+//run func that post to database
+//post added json to url
+
+
+//patch name change to server
+//delete from server
+
+//retrieve values from form
+//put into favrory function store.create
+//run to store with function store.pushINTO STORE
+//render main to reflect the changes
+//just call function that generates list view again?
+
+//HOW DO I CHECK THAT THE STORE AND SERVER MATCH???
+
+//FILTER
+//on.click of each of the different areas
+//should it be a button??
+//make function with array
+//that passes shown into first function
+
+
