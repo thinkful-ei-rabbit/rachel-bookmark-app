@@ -1,3 +1,5 @@
+import cuid from 'cuid';
+
 const showDropDown = false;
 const store = {
     
@@ -41,10 +43,36 @@ const store = {
 //when promise of adding bookmark is kept,
 //when added to database
 //rerender page
+const findById = function (id) {
+  //returns bookmark
+  return this.store.bookmarks.find(currentBookmark => currentBookmark.id === id);
+}
+//call when ready to add to store
+//factory function that creates then calls this
+const addBookmark = function (bookmark){
+  this.store.bookmarks.push(bookmark);
+}
 
+const findAndUpdate = function (id, newData){
+  const currentBookmark = this.findById(id);
+  Object.assign(currentBookmark, newData);
+}
 
-//let hide dropdown = false
-//have property that toggles if this.hideDropDown 
+const create =  function(title, rating, url, description){
+  return {
+    id: cuid(),
+    title,
+    rating,
+    url,
+    description,
+    expanded: false
+  }
+}
+
+//call in bookmark js and send to push function here
+//function validate url = fetch url and check if 200
+//else prevent resubmission
+
 
 
 
@@ -53,5 +81,9 @@ const store = {
 
 export default{
   store,
-  showDropDown
+  addBookmark,
+  findAndUpdate,
+  findById,
+  showDropDown,
+  create
 };

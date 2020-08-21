@@ -6,7 +6,6 @@ import '../index.css';
 
 function main() {
     bookmarks.generateListView();
-    console.log(store.showDropDown);
 
 }
 

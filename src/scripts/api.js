@@ -3,7 +3,12 @@ const BASE_URL = 'https://thinkful-list-api.herokuapp.com/rachel/bookmarks'
 //READ
 const getBookmark = (() => fetch(BASE_URL));
 
-const getLink = ((url) => fetch(url));
+//CHECK BOOKMARK VALIDIDTY THROUGH TEXTING UPI
+
+const validateUrl = (url => {
+        return fetch(url);
+});
+//ifresponse ok
 
 const createBookmark = (name => {
     const newBookmark = JSON.stringify({ name });
@@ -41,7 +46,7 @@ const updateBookmark = ((id, updateData) => {
 
 export default {
     getBookmark,
-    getLink,
     createBookmark,
     updateBookmark,
+    validateUrl
 }
