@@ -97,6 +97,7 @@ const generateForms = function () {
         <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
         </div>
         </div>
+    <lable for="description"></lable>
     <input type="text" id="description" name="description" class="input-description" placeholder="Add a description of your bookmark (optional)">
    <div class = "row">${cxl}${submit}</div>
 
@@ -220,22 +221,34 @@ const render = ((header, main) => {
 
 
 
-const submit = function (event){
+const submit = function (event) {
     const arr = ($(event.target).serializeArray());
-    console.log(arr);
     event.preventDefault();
 
     const url = arr[1].value;
     api.validateUrl(url);
 
     const title = arr[0].value;
-    const description = arr[3].value;
+    const description = arr[2].value;
+
 
     const obj = store.create(title, url, description);
-console.log(obj);
-    
+    store.store.bookmarks.push(obj);
+    generateListView();
+    //in addition to storing this to the store,
+    //we need to push this to the database
+
+        //check for equality in api js
+        //render page view if true from api-js???
+        //make error class for url in css, outline in red
+        //add to html ('url is not valid')
+        //how do I add this to the form page? 
+        //how do I get the store to load on page view???
     
 }
+
+
+
 $('main').submit('form', submit);
 /*$( "form" ).submit(function( event ) {
   console.log( $( this ).serializeArray() );
