@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import store from './store';
-import api from './api'
-import item from './item';
-
+import api from './api';
 
 
 
@@ -218,11 +216,14 @@ const render = ((header, main) => {
 
 
 //EXPERIMENTAL
+const formatObjectPost = function(){
 
+}
 
 
 const submit = function (event) {
     const arr = ($(event.target).serializeArray());
+    console.log(arr);
     event.preventDefault();
 
     const url = arr[1].value;
@@ -233,23 +234,26 @@ const submit = function (event) {
 
 
     const obj = store.create(title, url, description);
-    store.store.bookmarks.push(obj);
+    store.addBookmark(obj);
+    console.log(obj);
+    api.createBookmark(obj);
+
     generateListView();
     //in addition to storing this to the store,
     //we need to push this to the database
 
-        //check for equality in api js
-        //render page view if true from api-js???
-        //make error class for url in css, outline in red
-        //add to html ('url is not valid')
-        //how do I add this to the form page? 
-        //how do I get the store to load on page view???
-    
+    //check for equality in api js
+    //render page view if true from api-js???
+    //make error class for url in css, outline in red
+    //add to html ('url is not valid')
+    //how do I add this to the form page? 
+    //how do I get the store to load on page view???
+
 }
 
 
 
-$('main').submit('form', submit);
+
 /*$( "form" ).submit(function( event ) {
   console.log( $( this ).serializeArray() );
   event.preventDefault();
@@ -337,15 +341,7 @@ const submit = function () {
 
 
 
-//EVENT LISTENERS
-
-//event listner to toggle dropdown
-$('header').on('click', '.filter', event => {
-    store.showDropDown = !store.showDropDown;
-    generateListView();
-});
-
-
+//HANDLE EVENTS
 
 //toggles bookmarks open and shut
 const handleBookmarkToggle = function (event) {
@@ -359,18 +355,13 @@ const handleBookmarkToggle = function (event) {
 
 };
 
-const bindEventListeners = function () {
+$('header').on('click', '.filter', event => {
+    store.showDropDown = !store.showDropDown;
+    generateListView();
+});
 
+$('main').submit('form', submit);
 
-    handleAddBookmarkSubmit();
-};
-
-const toAddPage = function () {
-
-}
-const handleAddPage = function () {
-
-}
 $('header').on('click', '#add', addPage);
 $('header').on('click', '#cxl', generateListView);
 
@@ -379,27 +370,10 @@ $('main').on('click', '.bookmark-section', handleBookmarkToggle);
 
 export default {
     generateListView,
-    render,
-    bindEventListeners
+    render
 };
 
 
 
 
 
-//switching button to submit
-//event.preventdefault
-//handle form by serialize array
-//run fuction that tests url
-    //api.js
-
-//post to url
-//parse url and do with factory function
-    //store.js
-
-
-
-
-
-
-//after break, serialize form and start working with the APIS

@@ -7,6 +7,12 @@ import '../index.css';
 function main() {
     bookmarks.generateListView();
 
+    api.getBookmarks()
+    .then(bookmarks => {
+      bookmarks.forEach(item => store.addItem(item));
+      bookmarks.generateListView();
+    }
+
 }
 
 $(main);

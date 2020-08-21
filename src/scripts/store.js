@@ -65,9 +65,10 @@ const create =  function(title, url, description){
     rating: 4,
     url,
     description,
-    expanded: false
+    expanded: false,
   }
 }
+
 
 export default{
   store,
