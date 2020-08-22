@@ -4,9 +4,6 @@ const BASE_URL = 'https://thinkful-list-api.herokuapp.com/rachel'
 //READ
 const getBookmark = (() => {
    return fetch(`${BASE_URL}/bookmarks`)
-    .then(res => res.json())
-    .then(data => console.log(data))
-    .then(data => store.createBookmark(data))
       
     });
 
@@ -22,7 +19,6 @@ const validateUrl = (url => {
 
 const createBookmark = (content => {
     const newBookmark = JSON.stringify(content);
-    console.log(newBookmark);
     return fetch(`${BASE_URL}/bookmarks`, {
         method: 'POST',
         headers: {

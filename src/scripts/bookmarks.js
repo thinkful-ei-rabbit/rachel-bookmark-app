@@ -232,7 +232,15 @@ const generateStarRating = function (num) {
     return html;
 };
 
+const renderFromApi = function(arr){
+    const toPush = store.store.bookmarks;
+    const object = arr.forEach(obj => {
+       let news = store.create(obj.title, obj.url, obj.description);
+       toPush.push(news);
+    })
 
+    generateListView();
+}
 
 
 const submit = function (event) {
@@ -244,10 +252,10 @@ const submit = function (event) {
     api.validateUrl(url);
 
     const title = arr[0].value;
-    const description = arr[2].value;
+    const desc = arr[2].value;
 
 
-    const obj = store.create(title, url, description);
+    const obj = store.create(title, url, desc);
     store.addBookmark(obj);
     console.log(obj);
     api.createBookmark(obj);
@@ -345,128 +353,6 @@ $('main').on('click', '#edit', handleBookmarkEdit)
 
 //click on div in dropdown to delect 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*$( "form" ).submit(function( event ) {
-  console.log( $( this ).serializeArray() );
-  event.preventDefault();
-});
- 
-from api.js
- .then(res =>{
-            if (res.ok) {
-                console.log('Valid url')
-            } else {
-                console.log('notValid')
-            }
-        })
-        
- 
- 
-const submit = function () {
-    const title = $('#title').val();
-    const rating = $('#rating').val();
-    const url = $('#url').val();
-    const description = $('#description').val();
-    //api.validateUrl(url)
- 
-}*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //HANDLE EVENTS
 
 //toggles bookmarks open and shut
@@ -498,5 +384,6 @@ $('main').on('click', 'section', handleBookmarkToggle);
 
 export default {
     generateListView,
-    render
+    render,
+    renderFromApi
 }

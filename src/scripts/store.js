@@ -93,34 +93,5 @@ export default{
   create
 };
 
-//TOMORROW
-//wrap text feilds
-//rating in form can be dupicated in add 
-//with dropdown stars
-
-//check url before adding to store.store.bookmarks
-//.then 
-//run function that adds bookmark to store
-//.then 
-//run func that post to database
-//post added json to url
-
-
-//patch name change to server
-//delete from server
-
-//retrieve values from form
-//put into favrory function store.create
-//run to store with function store.pushINTO STORE
-//render main to reflect the changes
-//just call function that generates list view again?
-
-//HOW DO I CHECK THAT THE STORE AND SERVER MATCH???
-
-//FILTER
-//on.click of each of the different areas
-//should it be a button??
-//make function with array
-//that passes shown into first function
 
 
