@@ -1,13 +1,14 @@
 import cuid from 'cuid';
 
-const showDropDown = true;
+let showDropDown = true;
+let filtered = false;
 const store = {
     
     bookmarks: [
       {
         id: 'x56w',
         title: 'Chicken Cacciatore',
-        rating: 5,
+        rating: 2,
         url: 'https://cafedelites.com/chicken-cacciatore/',
         description: 'Chicken and vegetables cooked in a red wine tomato sauce',
         expanded: false
@@ -72,6 +73,7 @@ const create =  function(title, url, description){
 
 export default{
   store,
+  filtered,
   addBookmark,
   findAndUpdate,
   findById,

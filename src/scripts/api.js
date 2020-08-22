@@ -1,7 +1,11 @@
 const BASE_URL = 'https://thinkful-list-api.herokuapp.com/rachel'
 
 //READ
-const getBookmark = (() => fetch(`${BASE_URL}/bookmarks`));
+const getBookmark = (() => {
+   return fetch(`${BASE_URL}/bookmarks`)
+    .then(res => res.json())
+    .then(data => console.log(data))
+});
 
 //CHECK BOOKMARK VALIDIDTY THROUGH TEXTING UPI
 const validateUrl = (url => {
@@ -9,30 +13,6 @@ const validateUrl = (url => {
         .then(res => console.log(res.ok))
 
 })
-
-
-//if res.ok
-//initiate push to database
-//do not push if not
-//if not ok, add to bookmark view bottom
-//invalid url, bookmark will not be saved
-
-//practice post request with postman
-
-
-/*const validateUrl = function (url) {
-    console.log(url)
-    return fetch(url)
-        .then(res => res(json())
-        .then(data => console.log(data))
-        .then(res => {
-            if (res.ok) {
-                console.log('Valid url')
-            } else {
-                console.log('notValid')
-            }
-        })
-};*/
 
 
 const createBookmark = (content => {
@@ -60,7 +40,9 @@ const updateBookmark = ((id, updateData) => {
             'Content-Type': 'application/json'
         },
         body: newData
-    });
+    })
+    .then(res => res.json())
+    .then(data => console.log(data));;
 });
 
 

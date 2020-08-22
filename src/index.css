@@ -40,6 +40,11 @@ h1{
     margin-top: 6%;
 }
 
+h3{
+    padding: 0;
+    margin: 0;
+}
+
 main .bookmark-section{
     width: 86vw;
     height: 100%;
@@ -53,6 +58,7 @@ main section{
     border: 1px solid hsl(180, 65%, 15%);
     margin: 1em;
     background-color: #CCFFFF;
+    padding: 1em 0;
 }
 
 
@@ -177,5 +183,4 @@ main button:active{
  #description{
      width: 50vw;
      height: 30vh;
-     text-emphasis: wrap;
  }

@@ -18,14 +18,19 @@ const generateAddButton = function () {
 };
 
 const generateFilterWithDropDown = function () {
+    const five = generateStarRating(5);
+    const four = generateStarRating(4);
+    const three = generateStarRating(3);
+    const two = generateStarRating(2);
+    const one = generateStarRating(1);
     const filter =
         `<div class = 'drop-down'><button type="button" class="button filter">Filter</button>
     <ul class="dropdown">
-    <li class = 'five-star rating drop-down-five drop-down-item'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class='fill'>☆</span></li>
-    <li class = 'four-star rating drop-down-four drop-down-item'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'empty'>☆</span></li>
-    <li class = 'three-star rating drop-down-three drop-down-item'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span></li>
-    <li class = 'two-star rating drop-down-two drop-down-item'><span class = 'fill'>☆</span><span class = 'fill'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span></li>
-    <li class = 'one-star rating drop-down-one drop-down-item'><span class = 'fill'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span><span class = 'empty'>☆</span></li>
+    <li data-id="5" class = 'five-star rating drop-down-five drop-down-item'>${five}</li>
+    <li data-id="4" class = 'four-star rating drop-down-four drop-down-item'>${four}</li>
+    <li data-id="3" class = 'three-star rating drop-down-three drop-down-item'>${three}</li>
+    <li data-id=2 class = 'two-star rating drop-down-two drop-down-item'>${two}</li>
+    <li data-id=1 class = 'one-star rating drop-down-one drop-down-item'>${one}</li>
     </ul></div>`;
 
     return filter;
@@ -51,6 +56,11 @@ const generateCxlButton = function () {
 const generateDeleteButton = function () {
     const del = '<button type="button" class = "add delete button">Delete</button>';
     return del;
+};
+
+const generateEditButton = () => {
+    const edit = '<button type="button" id="edit" class = "edit button">Edit</button>';
+    return edit;
 };
 
 
@@ -80,7 +90,7 @@ const generateForms = function () {
     const cxl = generateCxlButton();
     const submit = generateSubmitButton();
 
-    const forms = ` <form>
+    const forms = ` <form id="new">
     <div class = 'form-item'>
     <label for="name">Title:</label>
     <input id="name" type="text" name="name" class="input-name" required />
@@ -120,20 +130,49 @@ const generateListView = function () {
     };
 
     const header = `${title}<div class ='header-buttons'>${add}${filter}</div>`;
-    const bookmarks = generateBookmarks();
-
+    const bookmarks = generateBookmarks(store.store.bookmarks);
     render(header, bookmarks);
 };
 
 
 
 
+const filterStars = (event) => {
+    store.store.filtered = !store.store.filtered;
+    const selected = $(event.currentTarget)
+        .closest('li')
+        .data('id');
+    const filter = store.store.bookmarks.filter(bookmark => bookmark.rating >= selected);
+    generateFilteredView(filter);
+    //return function and pass in filtered
+
+}
+
+const generateFilteredView = function (arr) {
+    const title = generateTitle();
+    const add = generateAddButton();
+    let filter = "";
+
+    if (store.showDropDown === false) {
+        filter = generateFilterWithDropDown();
+    } else {
+        filter = generateFilterButton();
+    };
+
+    const header = `${title}<div class ='header-buttons'>${add}${filter}</div>`;
+    const bookmarks = generateBookmarks(arr);
+    render(header, bookmarks);
+};
 
 
-const generateBookmarks = function () {
+
+
+const generateBookmarks = function (arr) {
     const bookmarks = [];
-    store.store.bookmarks.forEach(bookmark => {
+
+    arr.forEach(bookmark => {
         const rating = generateStarRating(bookmark.rating);
+        const edit = generateEditButton();
         const html = `
         <section class = "bookmark-section" >
            <div data-id="${bookmark.id}" class = "js-bookmark-each" > <div class = 'collapsed bookmark'>
@@ -149,9 +188,9 @@ const generateBookmarks = function () {
         } else {
             const expanded = `<div class= "bookmark-full">
             <div class='description'><p>${bookmark.description}</p></div>
-               <a target = "_blank" href=${bookmark.url}><button class = 'visit button' type = 'button'>Visit site</button></a>
-            
-        </div></div>
+               <div class='row'><a target = "_blank" href=${bookmark.url}><button class = 'visit button' type = 'button'>Visit site</button></a>
+                ${edit}
+        </div></div></div>
         </section>`;
 
             const expandedBookmark = `${html}${expanded}`;
@@ -196,6 +235,29 @@ const generateStarRating = function (num) {
 
 
 
+const submit = function (event) {
+    const arr = ($(event.target).serializeArray());
+    console.log(arr);
+    event.preventDefault();
+
+    const url = arr[1].value;
+    api.validateUrl(url);
+
+    const title = arr[0].value;
+    const description = arr[2].value;
+
+
+    const obj = store.create(title, url, description);
+    store.addBookmark(obj);
+    console.log(obj);
+    api.createBookmark(obj);
+
+    generateListView();
+}
+
+
+
+
 
 //RENDER
 const render = ((header, main) => {
@@ -216,40 +278,96 @@ const render = ((header, main) => {
 
 
 //EXPERIMENTAL
-const formatObjectPost = function(){
 
+const generateEditForm = function (object) {
+
+    let currentTitle = object.title;
+    console.log(currentTitle);
+    let currentUrl = object.url;
+    const cxl = generateCxlButton();
+    const submit = generateSubmitButton();
+
+    const forms = ` <form id="edit">
+    <div class = 'form-item'>
+    <label for="name">Title:</label>
+    <input id="name" type="text" name="name" class="input-name" required />
+    </div>
+    <div class = 'form-item'>
+    <label for="url">Url:</label>
+    <input type="text" id="url" name="url" class="input-url" required />
+    </div>
+    <div class = 'form-item'>
+    <lable for="rating">Rating:</lable>
+    <div class="rating">
+        <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+        </div>
+        </div>
+    <lable for="description"></lable>
+    <input type="text" id="description-edit" name="description" class="input-description" placeholder="Add a description of your bookmark (optional)">
+   <div class = "row">${cxl}${submit}</div>
+
+</form>
+
+    
+</section>`;
+    return forms;
 }
 
 
-const submit = function (event) {
-    const arr = ($(event.target).serializeArray());
-    console.log(arr);
-    event.preventDefault();
+const editPage = (event) => {
+    const e = $(event.target).closest('.js-bookmark-each').data('id');
+    const object = store.store.bookmarks.find(bookmark => (bookmark.id === e));
 
-    const url = arr[1].value;
-    api.validateUrl(url);
+    const title = generateTitle();
+    const cxl = generateCxlButton();
 
-    const title = arr[0].value;
-    const description = arr[2].value;
+    const header = `${title}<div class ='header-buttons'>${cxl}</div>`;
+    const form = generateEditForm(object);
 
+    const html = `${form}`;
 
-    const obj = store.create(title, url, description);
-    store.addBookmark(obj);
-    console.log(obj);
-    api.createBookmark(obj);
-
-    generateListView();
-    //in addition to storing this to the store,
-    //we need to push this to the database
-
-    //check for equality in api js
-    //render page view if true from api-js???
-    //make error class for url in css, outline in red
-    //add to html ('url is not valid')
-    //how do I add this to the form page? 
-    //how do I get the store to load on page view???
-
+    render(header, html);
 }
+
+//make different function to handle click and transport
+$('main').on('click', '.edit', editPage)
+
+
+
+
+//click on div in dropdown to delect 
+
+$('header').on('click', 'span', filterStars)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -258,7 +376,7 @@ const submit = function (event) {
   console.log( $( this ).serializeArray() );
   event.preventDefault();
 });
-
+ 
 from api.js
  .then(res =>{
             if (res.ok) {
@@ -268,15 +386,15 @@ from api.js
             }
         })
         
-
-
+ 
+ 
 const submit = function () {
     const title = $('#title').val();
     const rating = $('#rating').val();
     const url = $('#url').val();
     const description = $('#description').val();
     //api.validateUrl(url)
-
+ 
 }*/
 
 
@@ -360,20 +478,15 @@ $('header').on('click', '.filter', event => {
     generateListView();
 });
 
-$('main').submit('form', submit);
+$('main').submit('#new', submit);
 
 $('header').on('click', '#add', addPage);
 $('header').on('click', '#cxl', generateListView);
 
-$('main').on('click', '.bookmark-section', handleBookmarkToggle);
+$('main').on('click', 'section', handleBookmarkToggle);
 
 
 export default {
     generateListView,
     render
-};
-
-
-
-
-
+}
