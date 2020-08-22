@@ -1,3 +1,4 @@
+import store from './store'
 const BASE_URL = 'https://thinkful-list-api.herokuapp.com/rachel'
 
 //READ
@@ -5,7 +6,11 @@ const getBookmark = (() => {
    return fetch(`${BASE_URL}/bookmarks`)
     .then(res => res.json())
     .then(data => console.log(data))
-});
+    .then(data => store.createBookmark(data))
+      
+    });
+
+
 
 //CHECK BOOKMARK VALIDIDTY THROUGH TEXTING UPI
 const validateUrl = (url => {

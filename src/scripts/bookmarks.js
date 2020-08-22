@@ -314,30 +314,38 @@ const generateEditForm = function (object) {
 }
 
 
-const editPage = (event) => {
+const handleBookmarkEdit = (event) => {
+    console.log(event);
     const e = $(event.target).closest('.js-bookmark-each').data('id');
+    console.log(e)
     const object = store.store.bookmarks.find(bookmark => (bookmark.id === e));
 
+    editPage(object);
+    
+}
+
+
+const editPage = ((object) => {
     const title = generateTitle();
     const cxl = generateCxlButton();
 
     const header = `${title}<div class ='header-buttons'>${cxl}</div>`;
     const form = generateEditForm(object);
+    console.log(form);
 
     const html = `${form}`;
 
     render(header, html);
-}
-
+});
 //make different function to handle click and transport
-$('main').on('click', '.edit', editPage)
+$('main').on('click', '#edit', handleBookmarkEdit)
 
 
 
 
 //click on div in dropdown to delect 
 
-$('header').on('click', 'span', filterStars)
+
 
 
 
@@ -479,6 +487,8 @@ $('header').on('click', '.filter', event => {
 });
 
 $('main').submit('#new', submit);
+
+$('header').on('click', 'span', filterStars)
 
 $('header').on('click', '#add', addPage);
 $('header').on('click', '#cxl', generateListView);

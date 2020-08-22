@@ -5,14 +5,10 @@ import store from './store';
 import '../index.css';
 
 function main() {
-    bookmarks.generateListView();
+
 
    api.getBookmark()
-    .then(bookmark => {
-        console.log(bookmark);
-      bookmark.forEach(item => store.addItem(item));
-      bookmarks.generateListView();
-    })
+    
 
 }
 

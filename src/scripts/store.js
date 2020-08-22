@@ -59,6 +59,18 @@ const findAndUpdate = function (id, newData){
   Object.assign(currentBookmark, newData);
 }
 
+const createBookmark = (arr => {
+    arr.forEach(item => {
+       let each =  this.create(title, url, description);
+       console.log(each);
+       this.store.bookmarks.push();
+        
+
+        
+      bookmarks.generateListView()
+    });
+});
+
 const create =  function(title, url, description){
   return {
     id: cuid(),
