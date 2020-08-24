@@ -3,7 +3,9 @@ const BASE_URL = 'https://thinkful-list-api.herokuapp.com/rachel'
 
 //READ
 const getBookmark = (() => {
-   return fetch(`${BASE_URL}/bookmarks`)
+   return fetch(`${BASE_URL}/bookmarks`, {
+    mode: 'cors'
+   })
       
     });
 

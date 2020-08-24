@@ -348,11 +348,6 @@ const editPage = ((object) => {
 //make different function to handle click and transport
 $('main').on('click', '#edit', handleBookmarkEdit)
 
-
-
-
-//click on div in dropdown to delect 
-
 //HANDLE EVENTS
 
 //toggles bookmarks open and shut
