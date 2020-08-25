@@ -29,8 +29,8 @@ const generateFilterWithDropDown = function () {
     <li data-id="5" class = 'five-star rating drop-down-five drop-down-item'>${five}</li>
     <li data-id="4" class = 'four-star rating drop-down-four drop-down-item'>${four}</li>
     <li data-id="3" class = 'three-star rating drop-down-three drop-down-item'>${three}</li>
-    <li data-id=2 class = 'two-star rating drop-down-two drop-down-item'>${two}</li>
-    <li data-id=1 class = 'one-star rating drop-down-one drop-down-item'>${one}</li>
+    <li data-id="2" class = 'two-star rating drop-down-two drop-down-item'>${two}</li>
+    <li data-id="1" class = 'one-star rating drop-down-one drop-down-item'>${one}</li>
     </ul></div>`;
 
     return filter;
@@ -49,7 +49,7 @@ const generateSubmitButton = function () {
 };
 
 const generateCxlButton = function () {
-    const cxl = '<button type="button" id="cxl" class = "cancle button"> X </button>';
+    const cxl = '<button type="button" class="cxl cancle button"> X </button>';
     return cxl;
 };
 
@@ -87,9 +87,11 @@ const addPage = function () {
 
 //generateFORMS for addPage
 const generateForms = function () {
-    const cxl = generateCxlButton();
     const submit = generateSubmitButton();
 
+    //how to add secret form buttons
+    //lable class has secret value that effects 
+    //how stars re-render???
     const forms = ` <form id="new">
     <div class = 'form-item'>
     <label for="name">Title:</label>
@@ -102,12 +104,12 @@ const generateForms = function () {
     <div class = 'form-item'>
     <lable for="rating">Rating:</lable>
     <div class="rating">
-        <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+        <span class="star-item" data-id="1">☆</span><span class="star-item"  data-id="2">☆</span><span class="star-item"  data-id="3">☆</span><span class="star-item"  data-id="4">☆</span><span class="star-item"  data-id="5">☆</span>
         </div>
         </div>
-    <lable for="description"></lable>
-    <input type="text" id="description" name="description" class="input-description" placeholder="Add a description of your bookmark (optional)">
-   <div class = "row">${cxl}${submit}</div>
+    <lable for="desc"></lable>
+    <input type="text" id="desc" name="desc" class="desc-input" placeholder="Add a description of your bookmark (optional)">
+   <div class = "row">${submit}</div>
 
 </form>
 
@@ -115,6 +117,9 @@ const generateForms = function () {
 </section>`;
     return forms;
 }
+
+
+
 
 
 
@@ -175,11 +180,10 @@ const generateBookmarks = function (arr) {
         const edit = generateEditButton();
         const html = `
         <section class = "bookmark-section" >
-           <div data-id="${bookmark.id}" class = "js-bookmark-each" > <div class = 'collapsed bookmark'>
+           <div data-id="${bookmark.id}" class = "js-bookmark-each bookmark" >
             <h3>${bookmark.title}</h3>
                 <div class="rating">
                    ${rating}
-                </div>
             </div>`;
 
         if (bookmark.expanded === false) {
@@ -187,7 +191,7 @@ const generateBookmarks = function (arr) {
             bookmarks.push(closedBookmark);
         } else {
             const expanded = `<div class= "bookmark-full">
-            <div class='description'><p>${bookmark.description}</p></div>
+            <div class='desc'><p>${bookmark.desc}</p></div>
                <div class='row'><a target = "_blank" href=${bookmark.url}><button class = 'visit button' type = 'button'>Visit site</button></a>
                 ${edit}
         </div></div></div>
@@ -235,7 +239,7 @@ const generateStarRating = function (num) {
 const renderFromApi = function(arr){
     const toPush = store.store.bookmarks;
     const object = arr.forEach(obj => {
-       let news = store.create(obj.title, obj.url, obj.description);
+       let news = store.create(obj.title, obj.rating, obj.url, obj.desc);
        toPush.push(news);
     })
 
@@ -251,11 +255,12 @@ const submit = function (event) {
     const url = arr[1].value;
     api.validateUrl(url);
 
+    const rating = arr[2].value
     const title = arr[0].value;
-    const desc = arr[2].value;
+    const desc = arr[3].value;
 
 
-    const obj = store.create(title, url, desc);
+    const obj = store.create(title, rating, url, desc);
     store.addBookmark(obj);
     console.log(obj);
     api.createBookmark(obj);
@@ -264,7 +269,29 @@ const submit = function (event) {
 }
 
 
+const handleCxlButton = (event => {
+    //for each, if 
+    store.store.bookmarks.forEach(bookmark => {
+        if (bookmark.expanded === true){
+            bookmark.expanded = false;
+        }
+    })
+    generateListView()
+    
+});
 
+const editPage = ((object) => {
+    const title = generateTitle();
+    const cxl = generateCxlButton();
+
+    const header = `${title}<div class ='header-buttons'>${cxl}</div>`;
+    const form = generateEditForm(object);
+    console.log(form);
+
+    const html = `${form}`;
+
+    render(header, html);
+});
 
 
 //RENDER
@@ -290,29 +317,27 @@ const render = ((header, main) => {
 const generateEditForm = function (object) {
 
     let currentTitle = object.title;
-    console.log(currentTitle);
     let currentUrl = object.url;
-    const cxl = generateCxlButton();
+    let currentDesc = object.desc;
     const submit = generateSubmitButton();
+    const del = generateDeleteButton();
+
+    //
 
     const forms = ` <form id="edit">
     <div class = 'form-item'>
     <label for="name">Title:</label>
-    <input id="name" type="text" name="name" class="input-name" required />
+    <input id="name" type="text" name="name" class="input-name" value= "${currentTitle}" required />
     </div>
     <div class = 'form-item'>
     <label for="url">Url:</label>
-    <input type="text" id="url" name="url" class="input-url" required />
+    <input type="text" id="url" name="url" class="input-url" value="${currentUrl}"/>
     </div>
     <div class = 'form-item'>
-    <lable for="rating">Rating:</lable>
-    <div class="rating">
-        <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
         </div>
-        </div>
-    <lable for="description"></lable>
-    <input type="text" id="description-edit" name="description" class="input-description" placeholder="Add a description of your bookmark (optional)">
-   <div class = "row">${cxl}${submit}</div>
+    <lable for="desc"></lable>
+    <input type="text" id="desc-edit" name="desc" class="desc-input" value ="${currentDesc}">
+   <div class = "row">${del}${submit}</div>
 
 </form>
 
@@ -321,36 +346,7 @@ const generateEditForm = function (object) {
     return forms;
 }
 
-
-const handleBookmarkEdit = (event) => {
-    console.log(event);
-    const e = $(event.target).closest('.js-bookmark-each').data('id');
-    console.log(e)
-    const object = store.store.bookmarks.find(bookmark => (bookmark.id === e));
-
-    editPage(object);
-    
-}
-
-
-const editPage = ((object) => {
-    const title = generateTitle();
-    const cxl = generateCxlButton();
-
-    const header = `${title}<div class ='header-buttons'>${cxl}</div>`;
-    const form = generateEditForm(object);
-    console.log(form);
-
-    const html = `${form}`;
-
-    render(header, html);
-});
-//make different function to handle click and transport
-$('main').on('click', '#edit', handleBookmarkEdit)
-
-//HANDLE EVENTS
-
-//toggles bookmarks open and shut
+//EVENT HANDLER FUNCTIONS
 const handleBookmarkToggle = function (event) {
     const e = $(event.target).closest('.js-bookmark-each').data('id');
     const toggle = store.store.bookmarks.find(bookmark => (bookmark.id === e));
@@ -362,17 +358,155 @@ const handleBookmarkToggle = function (event) {
 
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const selectRating = (event) => {
+    const selected = $(event.currentTarget)
+        .closest('span')
+        .data('id');
+
+    console.log(selected);
+
+
+
+    $(event.currentTarget)
+        .closest('span')
+        .addClass('fill')
+
+//how to get all to fill at same time???
+//DIFFERENT TRAVERSAL METHOD
+
+//how can I only have one valid selection at once???
+
+
+//if (selected )
+}
+
+$('main').on('click', '.star-item', selectRating)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const handleBookmarkEdit = (event => {
+    event.stopPropagation();
+    const e = $(event.target).closest('.js-bookmark-each').data('id');
+    console.log(e)
+    const object = store.store.bookmarks.find(bookmark => (bookmark.id === e));
+
+    editPage(object);
+    
+});
+
+
+
+
+
+
 $('header').on('click', '.filter', event => {
     store.showDropDown = !store.showDropDown;
     generateListView();
 });
+
+//$('main').on('click', '#delete', handleDeleteBookmark)
+
+$('main').on('click', '#edit', handleBookmarkEdit);
 
 $('main').submit('#new', submit);
 
 $('header').on('click', 'span', filterStars)
 
 $('header').on('click', '#add', addPage);
-$('header').on('click', '#cxl', generateListView);
+$('header').on('click', '.cxl', handleCxlButton);
 
 $('main').on('click', 'section', handleBookmarkToggle);
 

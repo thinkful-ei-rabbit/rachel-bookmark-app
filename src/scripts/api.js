@@ -23,13 +23,16 @@ const createBookmark = (content => {
     const newBookmark = JSON.stringify(content);
     return fetch(`${BASE_URL}/bookmarks`, {
         method: 'POST',
+        mode: 'cors',
         headers: {
             'Content-Type': 'application/json'
         },
         body: newBookmark
     })
         .then(res => res.json())
-        .then(data => console.log(data));
+        .then(data => console.log(data))
+        .catch(err => console.error('bookmark could not be created'));
+        //render to screen bookmark could not be created
 
 });
 
@@ -51,7 +54,11 @@ const updateBookmark = ((id, updateData) => {
 
 
 //DELETE FUNCTION
-//write delete function
+const deleteBookmark = (id => {
+    return fetch(`${BASE_URL}/${id}`, {
+        method: 'DELETE'
+    })
+})
 
 
 
@@ -61,5 +68,6 @@ export default {
     getBookmark,
     createBookmark,
     updateBookmark,
-    validateUrl
+    validateUrl,
+    deleteBookmark
 }
