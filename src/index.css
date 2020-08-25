@@ -9,38 +9,48 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    
 }
 
 html{
-    width: 85vw;
-    overflow-x: hidden;
+ width: 99vw;
+ height: 100%;
+
+
+
 }
 
 body {
-    font-family: sans-serif;
+
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+
+    font-family: sans-serif;
     background-color: var(--lightest-blue);
     color: var(--dark-blue);
-    width: inherit;
+    width: 99vw;
+    height: inherit;
 
-    height: 100%;
+   
 }
 
 main {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    width: inherit;
+    width: 100vw;
+    height: 80vh;
+
+
+
 
 }
 
 
 main form {
-    margin-bottom: 5vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -49,12 +59,11 @@ main form {
 }
 
 main form input {
-    padding: 1rem;
+    padding: 0;
 }
 
 h1 {
-    margin-top: 6%;
-    font-size: 2em;
+    margin: 0;
 }
 
 h3 {
@@ -66,35 +75,67 @@ h3 {
 
 
 main section div>* {
-    margin: 5px 3px;
+    margin: 0;
 }
 
 main section {
     border: 1px solid var(--dark-blue);
-    margin: 1em;
     background-color: var(--light-blue);
-    padding: 1em 0;
-    width: 80%;
-    height: 100%;
+
+    width: 85vw;
+    margin: 1rem;
+    padding: 1rem;
+    
+  
 }
 
 
 
-main section .collapsed {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
 
 main section .bookmark{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: inherit;
+    width: 100%;
 }
 
+main section .bookmark-full{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+main section div .row{
+    display: flex;
+    flex-direction: center;
+    align-items: center;
+}
+
+main section form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    height: 70vh;
+}
+
+main section form div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+main section form .row{
+    display: flex;
+    flex-direction: row;
+    width: inherit;
+
+
+}
 
 main form input {
     margin: 1rem;
@@ -104,9 +145,7 @@ main form input {
     align-self: flex-end;
 }
 
-main form label {
-    width: 65px;
-}
+
 
 main form .form-item {
     display: flex;
@@ -120,9 +159,6 @@ header div ul {
 
 }
 
-h2{
-    font-size: 12px;
-}
 
 
 
@@ -131,18 +167,21 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: inherit;
-    width: inherit;
+
+    margin-top: 4%;
+    width: 100vw;
+    height: 15vh;
     flex-wrap: nowrap;
 }
 
 header div {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    margin: 0;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 4%;
+
+
 }
 
 header .drop-down {
@@ -150,44 +189,57 @@ header .drop-down {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: inherit;
-    margin: 0;
+
+    position: relative;
+    
+
+
 }
 
 header .drop-down .dropdown {
-    z-index: 20;
+    z-index: 1;
     border: 1px solid var(--dark-blue);
-    width: 85px;
-    padding: 2px;
-    margin: 0;
     background-color: var(--light-blue);
+
+    position: absolute;
+    top: 50px;
+    width: 85px;
 
 }
 
 
 .button {
-    margin: 1rem 2rem 0.3rem;
     width: 85px;
     height: 40px;
-    padding: 0;
     border: 1px solid var(--dark-blue);
     background-color: var(--dark-blue);
     color: var(--lightest-blue);
     outline: none;
     text-align: center;
     font-weight: bold;
-    margin-top: 4vh;
     align-self: center;
+    margin: 2%;
 
 }
 
-header #add {
-    align-self: flex-start;
+.submit{
+    color: var(--star)
 }
+
+
 
 main button:active {
     border: none;
     outline: none;
+}
+
+main form input{
+    width: 60vw;
+    align-self: flex-end;
+    height: 3vh;
+}
+.rating{
+    position: relative;
 }
 
 .rating>.fill:before {
@@ -210,8 +262,9 @@ main button:active {
 }
 
 .desc-input {
-    width: 50vw;
-    height: 30vh;
+    width: 80vw;
+    height: 35vw;
+
 
 }
 
@@ -221,7 +274,17 @@ main button:active {
 }
 
 
+
+
+
+
+
+
+
+
+/*MEDIA QUERIES*/
 @media all and (min-width: 600px){
+
     html{
         width: 100vw;
     }

@@ -337,7 +337,7 @@ const generateEditForm = function (object) {
         </div>
     <lable for="desc"></lable>
     <input type="text" id="desc-edit" name="desc" class="desc-input" value ="${currentDesc}">
-   <div class = "row">${del}${submit}</div>
+  <div>${del}${submit}</div>
 
 </form>
 
@@ -423,9 +423,13 @@ const selectRating = (event) => {
 $('main').on('click', '.star-item', selectRating)
 
 
+const handleDeleteButton = function(event){
+    //get element id
+    //find element by id
+    //remove from store with filter item id ! current item 
+}
 
-
-
+$('main').on('click', '.delete', handleDeleteButton)
 
 
 
