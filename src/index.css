@@ -9,12 +9,12 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    
+
 }
 
-html{
- width: 99vw;
- height: 100%;
+html {
+    width: 99vw;
+    height: 100%;
 
 
 
@@ -33,7 +33,7 @@ body {
     width: 99vw;
     height: inherit;
 
-   
+
 }
 
 main {
@@ -85,14 +85,14 @@ main section {
     width: 85vw;
     margin: 1rem;
     padding: 1rem;
-    
-  
+
+
 }
 
 
 
 
-main section .bookmark{
+main section .bookmark {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -100,7 +100,7 @@ main section .bookmark{
     width: 100%;
 }
 
-main section .bookmark-full{
+main section .bookmark-full {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -108,13 +108,13 @@ main section .bookmark-full{
     text-align: center;
 }
 
-main section div .row{
+main section div .row {
     display: flex;
     flex-direction: center;
     align-items: center;
 }
 
-main section form{
+main section form {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -122,14 +122,14 @@ main section form{
     height: 70vh;
 }
 
-main section form div{
+main section form div {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 
 }
 
-main section form .row{
+main section form .row {
     display: flex;
     flex-direction: row;
     width: inherit;
@@ -165,7 +165,7 @@ header div ul {
 header {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 
     margin-top: 4%;
@@ -191,7 +191,7 @@ header .drop-down {
     align-items: center;
 
     position: relative;
-    
+
 
 
 }
@@ -208,13 +208,12 @@ header .drop-down .dropdown {
 }
 
 
-.button {
+button {
     width: 85px;
     height: 40px;
     border: 1px solid var(--dark-blue);
     background-color: var(--dark-blue);
     color: var(--lightest-blue);
-    outline: none;
     text-align: center;
     font-weight: bold;
     align-self: center;
@@ -222,7 +221,7 @@ header .drop-down .dropdown {
 
 }
 
-.submit{
+.submit {
     color: var(--star)
 }
 
@@ -233,12 +232,13 @@ main button:active {
     outline: none;
 }
 
-main form input{
+main form input {
     width: 60vw;
     align-self: flex-end;
     height: 3vh;
 }
-.rating{
+
+.rating {
     position: relative;
 }
 
@@ -268,9 +268,54 @@ main form input{
 
 }
 
-.bookmark{
+.bookmark {
     align-items: center;
     justify-content: center;
+}
+
+*:focus {
+    outline: var(--star) solid 2px;
+    z-index: 3;
+}
+
+
+li:focus{
+    outline: var(--dark-blue) solid 2px;
+}
+
+.bookmark-section:focus{
+    outline: var(--star) solid 2px;
+}
+
+
+input{
+    z-index: 5;
+}
+
+
+.form-rating{
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+}
+
+.rating-section{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0; 
+    margin: 0;
+}
+
+.rating-section input{
+    width: 10px;
+padding: 0;
+margin: 0;
+}
+
+.rating-section div{
+    padding: 0; margin: 0;
 }
 
 
@@ -280,21 +325,19 @@ main form input{
 
 
 
-
-
 /*MEDIA QUERIES*/
-@media all and (min-width: 600px){
+@media all and (min-width: 600px) {
 
-    html{
+    html {
         width: 100vw;
     }
 
     main .bookmark-section {
         width: 90vw;
-        
+
     }
 
-    header{
+    header {
         flex-direction: row;
     }
 

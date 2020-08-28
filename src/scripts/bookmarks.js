@@ -3,37 +3,15 @@ import store from './store';
 import api from './api';
 
 
-
-
-
 //GENERATE BUTTONS AND HEADER CONTENT
 const generateTitle = (() => {
-    const title = '<h1>Bookmarks</h1>';
+    const title = '<h1 tabindex="-1">Bookmarks</h1>';
     return title;
 });
 
 const generateAddButton = function () {
     const add = '<button type="button" class = "button add-button" id="add"> + </button>';
     return add;
-};
-
-const generateFilterWithDropDown = function () {
-    const five = generateStarRating(5);
-    const four = generateStarRating(4);
-    const three = generateStarRating(3);
-    const two = generateStarRating(2);
-    const one = generateStarRating(1);
-    const filter =
-        `<div class = 'drop-down'><button type="button" class="button filter">Filter</button>
-    <ul class="dropdown">
-    <li data-id="5" class = 'five-star rating drop-down-five drop-down-item'>${five}</li>
-    <li data-id="4" class = 'four-star rating drop-down-four drop-down-item'>${four}</li>
-    <li data-id="3" class = 'three-star rating drop-down-three drop-down-item'>${three}</li>
-    <li data-id="2" class = 'two-star rating drop-down-two drop-down-item'>${two}</li>
-    <li data-id="1" class = 'one-star rating drop-down-one drop-down-item'>${one}</li>
-    </ul></div>`;
-
-    return filter;
 };
 
 const generateFilterButton = function () {
@@ -44,12 +22,12 @@ const generateFilterButton = function () {
 };
 
 const generateSubmitButton = function () {
-    const submit = '<input type="submit" class = "submit button">';
+    const submit = '<button type="submit" class = "button">';
     return submit;
 };
 
 const generateCxlButton = function () {
-    const cxl = '<button type="button" class="cxl cancle button"> X </button>';
+    const cxl = '<button type="button" class="cxl cancle button">Cancel</button>';
     return cxl;
 };
 
@@ -63,6 +41,25 @@ const generateEditButton = () => {
     return edit;
 };
 
+const generateFilterWithDropDown = function () {
+    const five = generateStarRating(5);
+    const four = generateStarRating(4);
+    const three = generateStarRating(3);
+    const two = generateStarRating(2);
+    const one = generateStarRating(1);
+    const filterButton = generateFilterButton();
+    const filter =
+        `<div class = 'drop-down'>${filterButton}
+    <ul class="dropdown">
+    <li data-id="5" class = 'five-star rating drop-down-five drop-down-item' tabindex="0">${five}</li>
+    <li data-id="4" class = 'four-star rating drop-down-four drop-down-item' tabindex="0">${four}</li>
+    <li data-id="3" class = 'three-star rating drop-down-three drop-down-item' tabindex="0">${three}</li>
+    <li data-id="2" class = 'two-star rating drop-down-two drop-down-item' tabindex="0">${two}</li>
+    <li data-id="1" class = 'one-star rating drop-down-one drop-down-item' tabindex="0">${one}</li>
+    </ul></div>`;
+
+    return filter;
+};
 
 
 
@@ -89,26 +86,52 @@ const addPage = function () {
 const generateForms = function () {
     const submit = generateSubmitButton();
 
-    //how to add secret form buttons
-    //lable class has secret value that effects 
-    //how stars re-render???
-    const forms = ` <form id="new">
+    const five = generateStarRating(5);
+    const four = generateStarRating(4);
+    const three = generateStarRating(3);
+    const two = generateStarRating(2);
+    const one = generateStarRating(1);
+
+    const forms = ` <form id="new" method="post">
     <div class = 'form-item'>
     <label for="name">Title:</label>
-    <input id="name" type="text" name="name" class="input-name" required />
+    <input autofocus="on" id="name" type="text" name="name" class="input-name" required />
     </div>
     <div class = 'form-item'>
     <label for="url">Url:</label>
     <input type="text" id="url" name="url" class="input-url" required />
     </div>
-    <div class = 'form-item'>
-    <lable for="rating">Rating:</lable>
-    <div class="rating">
-        <span class="star-item" data-id="1">☆</span><span class="star-item"  data-id="2">☆</span><span class="star-item"  data-id="3">☆</span><span class="star-item"  data-id="4">☆</span><span class="star-item"  data-id="5">☆</span>
+    <div class = 'form-rating'>
+    
+        <div class="rating-section">
+        <input name="rating" type="radio" value="1">
+        <label for="one-star">${one}</label>
         </div>
+
+        <div class="rating-section">
+        <input name="rating" type="radio" value="2">
+        <label for="two-star">${two}</label>
         </div>
+
+        <div class="rating-section">
+        <input name="rating" type="radio" value="3">
+        <label for="three-star">${three}</label>
+        </div>
+
+        <div class="rating-section">
+        <input name="rating" type="radio" value="4">
+        <label for="four-star">${four}</label>
+        </div>
+
+        <div class="rating-section">
+        <input name="rating" type="radio" value="5">
+        <label for="five-star">${five}</label>
+        </div>
+    
+        </div>
+    <div class="form-item">
     <lable for="desc"></lable>
-    <input type="text" id="desc" name="desc" class="desc-input" placeholder="Add a description of your bookmark (optional)">
+    <input type="text" id="desc" name="desc" class="desc-input" placeholder="Add a description of your bookmark (optional)"></div>
    <div class = "row">${submit}</div>
 
 </form>
@@ -118,17 +141,12 @@ const generateForms = function () {
     return forms;
 }
 
-
-
-
-
-
 const generateListView = function () {
     const title = generateTitle();
     const add = generateAddButton();
     let filter = "";
 
-    if (store.showDropDown === false) {
+    if (store.store.showDropDown === false) {
         filter = generateFilterWithDropDown();
     } else {
         filter = generateFilterButton();
@@ -139,11 +157,9 @@ const generateListView = function () {
     render(header, bookmarks);
 };
 
-
-
-
 const filterStars = (event) => {
-    store.store.filtered = !store.store.filtered;
+    store.store.filtered = true;
+    store.store.showDropDown = !store.store.showDropDown;
     const selected = $(event.currentTarget)
         .closest('li')
         .data('id');
@@ -158,7 +174,7 @@ const generateFilteredView = function (arr) {
     const add = generateAddButton();
     let filter = "";
 
-    if (store.showDropDown === false) {
+    if (store.store.showDropDown === false) {
         filter = generateFilterWithDropDown();
     } else {
         filter = generateFilterButton();
@@ -169,46 +185,7 @@ const generateFilteredView = function (arr) {
     render(header, bookmarks);
 };
 
-
-
-
-const generateBookmarks = function (arr) {
-    const bookmarks = [];
-
-    arr.forEach(bookmark => {
-        const rating = generateStarRating(bookmark.rating);
-        const edit = generateEditButton();
-        const html = `
-        <section class = "bookmark-section" >
-           <div data-id="${bookmark.id}" class = "js-bookmark-each bookmark" >
-            <h3>${bookmark.title}</h3>
-                <div class="rating">
-                   ${rating}
-            </div>`;
-
-        if (bookmark.expanded === false) {
-            const closedBookmark = `${html}</div></section>`;
-            bookmarks.push(closedBookmark);
-        } else {
-            const expanded = `<div class= "bookmark-full">
-            <div class='desc'><p>${bookmark.desc}</p></div>
-               <div class='row'><a target = "_blank" href=${bookmark.url}><button class = 'visit button' type = 'button'>Visit site</button></a>
-                ${edit}
-        </div></div></div>
-        </section>`;
-
-            const expandedBookmark = `${html}${expanded}`;
-            bookmarks.push(expandedBookmark);
-
-        }
-
-    });
-    const htmlString = bookmarks.join('');
-    return htmlString;
-};
-
-
-const generateStarRating = function (num) {
+const generateStarRating = (num) => {
 
     const starFilled = '<span class = "fill">☆</span>';
     const starEmpty = '<span class = "empty">☆</span>';
@@ -232,63 +209,82 @@ const generateStarRating = function (num) {
 
     }
 
-    const html = `<div class = 'rating'>${rating}</div>`;
-    return html;
+    return `<div class = 'rating'>${rating}</div>`;
+
 };
 
-const renderFromApi = function(arr){
+const generateBookmarks = function (arr) {
+    const bookmarks = [];
+
+    arr.forEach(bookmark => {
+
+        const rating = generateStarRating(bookmark.rating);
+        const edit = generateEditButton();
+
+        let expandedContent = '';
+        if (bookmark.expanded === false) {
+            expandedContent = "";
+        } else {
+            expandedContent = `<div class= "bookmark-full">
+            <div class='desc'><p>${bookmark.desc}</p></div>
+               <div class='row'><a target = "_blank" href=${bookmark.url}><button class = 'visit button' type = 'button'>Visit site</button></a>
+                ${edit}
+        </div></div>`
+        }
+            const html = `
+        <section class = "bookmark-section" tabindex="0">
+           <div data-id="${bookmark.id}" class = "js-bookmark-each bookmark" >
+            <h2>${bookmark.title}</h2>
+                <div class="rating">
+                   ${rating}
+            </div>
+                ${expandedContent}
+            
+            </section>
+            </div>`;
+
+            bookmarks.push(html);
+
+        }
+
+    );
+    const htmlString = bookmarks.join('');
+    return htmlString;
+};
+
+
+
+
+const renderFromApi = function (arr) {
     const toPush = store.store.bookmarks;
-    const object = arr.forEach(obj => {
-       let news = store.create(obj.title, obj.rating, obj.url, obj.desc);
-       toPush.push(news);
+    arr.forEach(obj => {
+        let news = store.create(obj.title, obj.rating, obj.url, obj.desc);
+        toPush.push(news);
     })
 
     generateListView();
 }
 
 
-const submit = function (event) {
-    const arr = ($(event.target).serializeArray());
-    console.log(arr);
-    event.preventDefault();
-
-    const url = arr[1].value;
-    api.validateUrl(url);
-
-    const rating = arr[2].value
-    const title = arr[0].value;
-    const desc = arr[3].value;
-
-
-    const obj = store.create(title, rating, url, desc);
-    store.addBookmark(obj);
-    console.log(obj);
-    api.createBookmark(obj);
-
-    generateListView();
-}
-
-
-const handleCxlButton = (event => {
-    //for each, if 
+const handleCxlButton = (event => { 
     store.store.bookmarks.forEach(bookmark => {
-        if (bookmark.expanded === true){
+        if (bookmark.expanded === true) {
             bookmark.expanded = false;
         }
     })
     generateListView()
-    
+
 });
 
 const editPage = ((object) => {
     const title = generateTitle();
     const cxl = generateCxlButton();
 
-    const header = `${title}<div class ='header-buttons'>${cxl}</div>`;
+    const header = `${ title } <div class='header-buttons'>${cxl}</div>`;
     const form = generateEditForm(object);
     console.log(form);
 
-    const html = `${form}`;
+    const html = `${ form } `;
 
     render(header, html);
 });
@@ -322,114 +318,57 @@ const generateEditForm = function (object) {
     const submit = generateSubmitButton();
     const del = generateDeleteButton();
 
-    //
-
-    const forms = ` <form id="edit">
-    <div class = 'form-item'>
-    <label for="name">Title:</label>
-    <input id="name" type="text" name="name" class="input-name" value= "${currentTitle}" required />
+    const forms = ` < form id = "edit" method = "patch" >
+    <div class='form-item'>
+        <label for="name">Title:</label>
+        <input autofocus="on" id="name" type="text" name="name" class="input-name" value="${currentTitle}" required />
     </div>
-    <div class = 'form-item'>
-    <label for="url">Url:</label>
-    <input type="text" id="url" name="url" class="input-url" value="${currentUrl}"/>
+    <div class='form-item'>
+        <label for="url">Url:</label>
+        <input type="text" id="url" name="url" class="input-url" value="${currentUrl}" />
     </div>
-    <div class = 'form-item'>
-        </div>
+    <div class='form-item'>
+    </div>
     <lable for="desc"></lable>
-    <input type="text" id="desc-edit" name="desc" class="desc-input" value ="${currentDesc}">
-  <div>${del}${submit}</div>
+    <input type="text" id="desc-edit" name="desc" class="desc-input" value="${currentDesc}">
+        <div>${del}${submit}</div>
 
 </form>
 
     
-</section>`;
+</section > `;
     return forms;
 }
 
-//EVENT HANDLER FUNCTIONS
-const handleBookmarkToggle = function (event) {
-    const e = $(event.target).closest('.js-bookmark-each').data('id');
-    const toggle = store.store.bookmarks.find(bookmark => (bookmark.id === e));
 
-    if (toggle.expanded === true) {
-        toggle.expanded = false;
-    } else { toggle.expanded = true };
+
+
+
+
+
+
+
+
+
+const submit =  event => {
+    const arr = ($(event.target).serializeArray());
+    event.preventDefault();
+
+    const url = arr[1].value;
+    api.validateUrl(url);
+
+    const rating = arr[2].value
+    const title = arr[0].value;
+    const desc = arr[3].value;
+
+    const obj = store.create(title, rating, url, desc);
+    store.store.bookmarks.push(obj);
+    api.createBookmark(obj);
+
     generateListView();
 
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const selectRating = (event) => {
-    const selected = $(event.currentTarget)
-        .closest('span')
-        .data('id');
-
-    console.log(selected);
-
-
-
-    $(event.currentTarget)
-        .closest('span')
-        .addClass('fill')
-
-//how to get all to fill at same time???
-//DIFFERENT TRAVERSAL METHOD
-
-//how can I only have one valid selection at once???
-
-
-//if (selected )
 }
 
-$('main').on('click', '.star-item', selectRating)
-
-
-const handleDeleteButton = function(event){
-    //get element id
-    //find element by id
-    //remove from store with filter item id ! current item 
-}
-
-$('main').on('click', '.delete', handleDeleteButton)
 
 
 
@@ -456,63 +395,67 @@ $('main').on('click', '.delete', handleDeleteButton)
 
 
 
+$('main').on('click', '.delete', e => {
+    console.log('delete button pressed')
+})
 
 
+$('header').on('click', '.filter', event => {
+    store.store.showDropDown = !store.store.showDropDown;
+    generateListView();
+
+});
 
 
+$("main").on('keydown', '.bookmark-section', (e) => {
+    if (e.keyCode == 13) {
+        const id = $(e.target).children().first().data('id');
+
+        const toggle = store.store.bookmarks.find(bookmark => (bookmark.id === id));
+        if (toggle.expanded === true) {
+            toggle.expanded = false;
+        } else { toggle.expanded = true };
+        generateListView();
+    };
+    }
+);
+
+$("header").on('keydown', 'li', (e) => {
+    if(e.keyCode == 13){
+        filterStars(e);
+    }
+});
 
 
+$('li').focus();
+$('button').focus();
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const handleBookmarkEdit = (event => {
+$('main').on('click', '#edit', event => {
     event.stopPropagation();
     const e = $(event.target).closest('.js-bookmark-each').data('id');
     console.log(e)
     const object = store.store.bookmarks.find(bookmark => (bookmark.id === e));
 
     editPage(object);
-    
 });
-
-
-
-
-
-
-$('header').on('click', '.filter', event => {
-    store.showDropDown = !store.showDropDown;
-    generateListView();
-});
-
-//$('main').on('click', '#delete', handleDeleteBookmark)
-
-$('main').on('click', '#edit', handleBookmarkEdit);
 
 $('main').submit('#new', submit);
 
-$('header').on('click', 'span', filterStars)
+$('header').on('click', 'span', filterStars);
 
 $('header').on('click', '#add', addPage);
 $('header').on('click', '.cxl', handleCxlButton);
 
-$('main').on('click', 'section', handleBookmarkToggle);
+$('main').on('click', '.bookmark-section', e => {
+    const id = $(event.target).closest('.js-bookmark-each').data('id');
+    const toggle = store.store.bookmarks.find(bookmark => (bookmark.id === id));
+
+    if (toggle.expanded === true) {
+        toggle.expanded = false;
+    } else { toggle.expanded = true };
+    generateListView();
+});
 
 
 export default {

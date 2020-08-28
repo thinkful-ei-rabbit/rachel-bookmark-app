@@ -1,4 +1,3 @@
-import store from './store'
 const BASE_URL = 'https://thinkful-list-api.herokuapp.com/rachel'
 
 //READ
@@ -30,7 +29,6 @@ const createBookmark = (content => {
         body: newBookmark
     })
         .then(res => res.json())
-        .then(data => console.log(data))
         .catch(err => console.error('bookmark could not be created'));
         //render to screen bookmark could not be created
 
@@ -48,7 +46,9 @@ const updateBookmark = ((id, updateData) => {
         body: newData
     })
     .then(res => res.json())
-    .then(data => console.log(data));;
+    .then(data => console.log(data))
+    .catch(error => console.log(error))
+    //modal popup
 });
 
 
@@ -71,3 +71,11 @@ export default {
     validateUrl,
     deleteBookmark
 }
+
+
+
+//buttons on edit form
+//button at top of the screen shrinking
+//text wrapping in description: text-feild??? can that be used with form elements?
+//switching to radio buttons on form
+//
