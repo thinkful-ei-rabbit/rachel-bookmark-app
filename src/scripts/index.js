@@ -9,9 +9,7 @@ function main() {
    api.getBookmark()
    .then(res => res.json())
    .then(data => bookmarks.renderFromApi(data))
-    
-
-   
+   .catch(error => bookmarks.generateErrorMessage(error));
 
 }
 

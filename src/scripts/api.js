@@ -28,9 +28,6 @@ const createBookmark = (content => {
         },
         body: newBookmark
     })
-        .then(res => res.json())
-        .catch(err => console.error('bookmark could not be created'));
-        //render to screen bookmark could not be created
 
 });
 

@@ -29,7 +29,7 @@ const generateSubmitButton = function () {
 };
 
 const generateCxlButton = function () {
-    const cxl = '<button type="button" class="cxl cancle button">Cancel</button>';
+    const cxl = '<button type="button" id="cxl" class="cancle button">Cancel</button>';
     return cxl;
 };
 
@@ -62,15 +62,6 @@ const generateFilterWithDropDown = function () {
 
     return filter;
 };
-
-
-
-
-
-
-
-
-
 
 
 //FORMS FOR ADD PAGE
@@ -130,8 +121,6 @@ const generateForms = function () {
     return forms;
 }
 
-
-
 //GENERATE EDIT PAGE
 const editPage = ((object, id) => {
     const title = generateTitle();
@@ -176,12 +165,6 @@ const generateEditForm = function (object) {
 `;
     return forms;
 }
-
-
-
-
-
-
 
 
 //GENERATE LIST VIEW
@@ -271,6 +254,33 @@ const generateBookmarks = function (arr) {
 };
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ///////////////////////////////////////////////////////
 //SHOULD I MOVE THIS SECTION TO ANOTHER PAGE????
 const generateStarRating = (num) => {
@@ -323,7 +333,7 @@ const renderFromApi = function (arr) {
         toPush.push(news);
     })
 
-    generateListView(store.store.bookmarksd);
+    generateListView(store.store.bookmarks);
 }
 
 
@@ -356,7 +366,12 @@ $('main').on('click', '.delete', e => {
     const newStore = store.store.bookmarks.filter(bookmark => (bookmark.id !== id))
     
     store.store.bookmarks = [...newStore];
-    api.deleteBookmark(id);
+    api.deleteBookmark(id)
+        .then(res => res.json())
+        .then(data => console.log(data))
+        .catch(error => generateErrorMessage(error))
+    
+    ;
     
     generateListView();
     
@@ -398,7 +413,7 @@ $('header').on('click', 'span', filterStars);
 
 
     //get id of element needing to be deleted with parent method
-    $('main').submit('#edit', e => {
+    $('main').submit('#submit', e => {
         e.preventDefault();
         e.stopPropagation();
     
@@ -406,7 +421,7 @@ $('header').on('click', 'span', filterStars);
         //check for equivalent values
         //get values 
     
-    })
+    });
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -418,33 +433,48 @@ $('main').submit('#new',  event => {
     event.preventDefault();
 
     const url = arr[1].value;
-
-/////////////////////////////////////////////////
-    //CHANGE THIS TO SHOW ON SCREEN
-    api.validateUrl(url)
-    .catch(error => alert('This is not a valid url'));
-//////////////////////////////////////////
-
-
-
     const rating = arr[2].value;
     const title = arr[0].value;
     const desc = arr[3].value;
     const id = cuid();
 
+    //go back to validating 
+
     const obj = store.create(id, title, rating, url, desc);
+ 
+    api.createBookmark(obj)
+    .then(res => {
+            if(res.ok){
+                const newArr = store.store.bookmarks.push(obj);
+                return generateListView(newArr);
+            } else {
+                return res.json()
+            }
+        })
+    .then(data => generateErrorMessage(`<h2 class='error-header'>Bookmark could not be saved: </h2><p class='error-message'> ${data.message}</p>`))
+    .catch(err => console.log(err));
     
-    api.createBookmark(obj);
-    const newArr = store.store.bookmarks.push(obj);
-  
-    generateListView(newArr);
 
 });
+
+const generateErrorMessage = (error) => {
+    const header = '';
+    const cxl = generateCxlButton();
+    const html = `${error}${cxl}`;
+
+    render(header, html);
+     
+    // setTimeout(generateListView(store.store.bookmarks), 2000);
+     // $('main').on('click', '.cxl', clearTimeout(timeout));
+ 
+
+ 
+ }
 
 
 //GENERATE LIST VIEW ON CLICK OF CANCLE BUTTON
 //SWITCH EXPANDED TO FALSE SO ALL ARE CLOSED
-$('header').on('click', '.cxl', (e => { 
+$('body').on('click', '#cxl', (e => { 
 
     //I RUN THIS CODEE OVER AND OVER> I CAN PUT THIS IN STORE AND USE IT AGAIN
     store.store.bookmarks.forEach(bookmark => {
@@ -514,4 +544,5 @@ $("main").on('keydown', '.bookmark-section', (e) => {
 export default {
     render,
     renderFromApi,
-}
+    generateErrorMessage,
+};
