@@ -13,7 +13,7 @@ const getBookmark = (() => {
 //CHECK BOOKMARK VALIDIDTY THROUGH TEXTING UPI
 const validateUrl = (url => {
    return fetch(url)
-        .then(res => console.log(res.ok))
+        // .then(res => console.log(res.ok))
 
 })
 
@@ -55,8 +55,9 @@ const updateBookmark = ((id, updateData) => {
 
 //DELETE FUNCTION
 const deleteBookmark = (id => {
-    return fetch(`${BASE_URL}/${id}`, {
-        method: 'DELETE'
+    return fetch(`${BASE_URL}/bookmarks/${id}`, {
+        method: 'DELETE',
+        mode: "cors"
     })
 })
 

@@ -5,12 +5,13 @@ import store from './store';
 import '../index.css';
 
 function main() {
-bookmarks.generateListView();
 
    api.getBookmark()
    .then(res => res.json())
    .then(data => bookmarks.renderFromApi(data))
     
+
+   
 
 }
 

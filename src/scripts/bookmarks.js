@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import cuid from 'cuid';
+
 import store from './store';
 import api from './api';
 
@@ -22,7 +24,7 @@ const generateFilterButton = function () {
 };
 
 const generateSubmitButton = function () {
-    const submit = '<button type="submit" class = "button">';
+    const submit = '<button type="submit" class = "button">Submit</button>';
     return submit;
 };
 
@@ -69,20 +71,9 @@ const generateFilterWithDropDown = function () {
 
 
 
-//COMBINES PIECES AND RUNS RENDER
-const addPage = function () {
-    const title = generateTitle();
-    const cxl = generateCxlButton();
 
-    const header = `${title}<div class ='header-buttons'>${cxl}</div>`;
-    const form = generateForms();
 
-    const html = `${form}`;
-
-    render(header, html);
-}
-
-//generateFORMS for addPage
+//FORMS FOR ADD PAGE
 const generateForms = function () {
     const submit = generateSubmitButton();
 
@@ -92,7 +83,7 @@ const generateForms = function () {
     const two = generateStarRating(2);
     const one = generateStarRating(1);
 
-    const forms = ` <form id="new" method="post">
+    const forms = ` <form id="new">
     <div class = 'form-item'>
     <label for="name">Title:</label>
     <input autofocus="on" id="name" type="text" name="name" class="input-name" required />
@@ -135,13 +126,66 @@ const generateForms = function () {
    <div class = "row">${submit}</div>
 
 </form>
-
-    
 </section>`;
     return forms;
 }
 
-const generateListView = function () {
+
+
+//GENERATE EDIT PAGE
+const editPage = ((object, id) => {
+    const title = generateTitle();
+    const cxl = generateCxlButton();
+
+    const header = `${ title } <div class='header-buttons'>${cxl}</div>`;
+    const form = generateEditForm(object);
+
+    const html = `<div id="getId" data-id=${id} ${ form }</div> `;
+    console.log(html)
+
+    render(header, html);
+});
+
+
+//FORM FOR EDIT PAGE
+const generateEditForm = function (object) {
+
+    let currentTitle = object.title;
+    let currentUrl = object.url;
+    let currentDesc = object.desc;
+    const submit = generateSubmitButton();
+    const del = generateDeleteButton();
+
+    const forms = `<form id = "edit">
+    <div class='form-item'>
+        <label for="name">Title:</label>
+        <input autofocus="on" id="name" type="text" name="name" class="input-name" value="${currentTitle}" required />
+    </div>
+    <div class='form-item'>
+        <label for="url">Url:</label>
+        <input type="text" id="url" name="url" class="input-url" value="${currentUrl}" />
+    </div>
+    <div class='form-item'>
+    </div>
+    <lable for="desc"></lable>
+    <input type="text" id="desc-edit" name="desc" class="desc-input" value="${currentDesc}">
+       <div class = 'form-item'>${submit}${del}</div></div>
+        
+</form>
+
+`;
+    return forms;
+}
+
+
+
+
+
+
+
+
+//GENERATE LIST VIEW
+const generateListView = function (arr) {
     const title = generateTitle();
     const add = generateAddButton();
     let filter = "";
@@ -165,9 +209,9 @@ const filterStars = (event) => {
         .data('id');
     const filter = store.store.bookmarks.filter(bookmark => bookmark.rating >= selected);
     generateFilteredView(filter);
-    //return function and pass in filtered
-
 }
+
+//LIST VIEW WITH FILTER
 
 const generateFilteredView = function (arr) {
     const title = generateTitle();
@@ -185,6 +229,50 @@ const generateFilteredView = function (arr) {
     render(header, bookmarks);
 };
 
+
+//GENERATE BOOKMARKS IN LIST VIEW
+//BOTH EXPANDED AND NOT
+const generateBookmarks = function (arr) {
+
+    const bookmarks = arr.map(bookmark => {
+        const num = parseInt(bookmark.rating);
+
+        const rating = generateStarRating(num);
+        const edit = generateEditButton();
+
+        let expandedContent = '';
+        
+            if (bookmark.expanded === false) {
+                expandedContent = "";
+            } else {
+                expandedContent = `<div class= "bookmark-full">
+                <div class='desc'><p>${bookmark.desc}</p></div>
+                <div class='expanded-buttons'><a target = "_blank" href=${bookmark.url}><button class = 'visit button' type = 'button'>Visit site</button></a>
+                    ${edit}
+            </div></div>`
+            }
+            
+        
+        return `
+        <section class = "bookmark-section" tabindex="0">
+           <div data-id="${bookmark.id}" class ="js-bookmark-each" >
+            <h2>${bookmark.title}</h2>
+                <div class="rating">
+                ${rating}
+            </div>
+                ${expandedContent}
+            </div></section>`;
+
+        }
+
+    );
+    const htmlString = bookmarks.join('');
+    return htmlString;
+};
+
+
+///////////////////////////////////////////////////////
+//SHOULD I MOVE THIS SECTION TO ANOTHER PAGE????
 const generateStarRating = (num) => {
 
     const starFilled = '<span class = "fill">☆</span>';
@@ -206,167 +294,36 @@ const generateStarRating = (num) => {
         case 5:
             rating = `${starFilled}${starFilled}${starFilled}${starFilled}${starFilled}`;
             break;
-
     }
 
     return `<div class = 'rating'>${rating}</div>`;
-
 };
 
-const generateBookmarks = function (arr) {
-    const bookmarks = [];
-
-    arr.forEach(bookmark => {
-
-        const rating = generateStarRating(bookmark.rating);
-        const edit = generateEditButton();
-
-        let expandedContent = '';
-        if (bookmark.expanded === false) {
-            expandedContent = "";
-        } else {
-            expandedContent = `<div class= "bookmark-full">
-            <div class='desc'><p>${bookmark.desc}</p></div>
-               <div class='row'><a target = "_blank" href=${bookmark.url}><button class = 'visit button' type = 'button'>Visit site</button></a>
-                ${edit}
-        </div></div>`
-        }
-            const html = `
-        <section class = "bookmark-section" tabindex="0">
-           <div data-id="${bookmark.id}" class = "js-bookmark-each bookmark" >
-            <h2>${bookmark.title}</h2>
-                <div class="rating">
-                   ${rating}
-            </div>
-                ${expandedContent}
-            
-            </section>
-            </div>`;
-
-            bookmarks.push(html);
-
-        }
-
-    );
-    const htmlString = bookmarks.join('');
-    return htmlString;
-};
+////////////////////////////////////////////////////////
 
 
 
 
-const renderFromApi = function (arr) {
-    const toPush = store.store.bookmarks;
-    arr.forEach(obj => {
-        let news = store.create(obj.title, obj.rating, obj.url, obj.desc);
-        toPush.push(news);
-    })
-
-    generateListView();
-}
 
 
-const handleCxlButton = (event => { 
-    store.store.bookmarks.forEach(bookmark => {
-        if (bookmark.expanded === true) {
-            bookmark.expanded = false;
-        }
-    })
-    generateListView()
-
-});
-
-const editPage = ((object) => {
-    const title = generateTitle();
-    const cxl = generateCxlButton();
-
-    const header = `${ title } <div class='header-buttons'>${cxl}</div>`;
-    const form = generateEditForm(object);
-    console.log(form);
-
-    const html = `${ form } `;
-
-    render(header, html);
-});
 
 
-//RENDER
+//RENDER PAGES TO SCREEN
 const render = ((header, main) => {
     $('header').html(header);
     $('main').html(main);
 });
 
 
+//RENDER DATA FROM API
+const renderFromApi = function (arr) {
+    const toPush = store.store.bookmarks;
+    arr.forEach(obj => {
+        let news = store.create(obj.id, obj.title, obj.rating, obj.url, obj.desc);
+        toPush.push(news);
+    })
 
-
-
-
-
-
-
-
-
-
-
-//EXPERIMENTAL
-
-const generateEditForm = function (object) {
-
-    let currentTitle = object.title;
-    let currentUrl = object.url;
-    let currentDesc = object.desc;
-    const submit = generateSubmitButton();
-    const del = generateDeleteButton();
-
-    const forms = ` < form id = "edit" method = "patch" >
-    <div class='form-item'>
-        <label for="name">Title:</label>
-        <input autofocus="on" id="name" type="text" name="name" class="input-name" value="${currentTitle}" required />
-    </div>
-    <div class='form-item'>
-        <label for="url">Url:</label>
-        <input type="text" id="url" name="url" class="input-url" value="${currentUrl}" />
-    </div>
-    <div class='form-item'>
-    </div>
-    <lable for="desc"></lable>
-    <input type="text" id="desc-edit" name="desc" class="desc-input" value="${currentDesc}">
-        <div>${del}${submit}</div>
-
-</form>
-
-    
-</section > `;
-    return forms;
-}
-
-
-
-
-
-
-
-
-
-
-
-const submit =  event => {
-    const arr = ($(event.target).serializeArray());
-    event.preventDefault();
-
-    const url = arr[1].value;
-    api.validateUrl(url);
-
-    const rating = arr[2].value
-    const title = arr[0].value;
-    const desc = arr[3].value;
-
-    const obj = store.create(title, rating, url, desc);
-    store.store.bookmarks.push(obj);
-    api.createBookmark(obj);
-
-    generateListView();
-
+    generateListView(store.store.bookmarksd);
 }
 
 
@@ -386,27 +343,159 @@ const submit =  event => {
 
 
 
+//EVENT HANDLER FUNCTIONS
 
-
-
-
-
-
-
-
-
+//DELETES FROM API AND REMAKES STORE
 $('main').on('click', '.delete', e => {
-    console.log('delete button pressed')
+    e.preventDefault();
+    e.stopPropagation();
+
+
+    const id = $(e.target).parents('#getId').data('id');
+
+    const newStore = store.store.bookmarks.filter(bookmark => (bookmark.id !== id))
+    
+    store.store.bookmarks = [...newStore];
+    api.deleteBookmark(id);
+    
+    generateListView();
+    
 })
 
 
+
+//BRING FOCUS TO ITEMS
+$('li').focus();
+$('button').focus();
+
+
+//HIDE SHOW DROPDOWN
 $('header').on('click', '.filter', event => {
     store.store.showDropDown = !store.store.showDropDown;
     generateListView();
 
 });
 
+//RUN FILTER FUNCTION WITH CLICK ON DROPDOWN MENU
+$("header").on('keydown', 'li', (e) => {
+    if(e.keyCode == 13){
+        filterStars(e);
+    }
+});
 
+$('header').on('click', 'span', filterStars);
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //get id of element needing to be deleted with parent method
+    $('main').submit('#edit', e => {
+        e.preventDefault();
+        e.stopPropagation();
+    
+        const id = $(e.target).parents('#getId').data('id');
+        //check for equivalent values
+        //get values 
+    
+    })
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+//SUBMIT NEW FORM AND SERIALIZE ARRAY
+//GET VALUES FROM ARRAY TO CREATE BOOKMARK OBJECT
+//SHOW ALL IN LIST VIEW
+$('main').submit('#new',  event => {
+    const arr = ($(event.target).serializeArray());
+    event.preventDefault();
+
+    const url = arr[1].value;
+
+/////////////////////////////////////////////////
+    //CHANGE THIS TO SHOW ON SCREEN
+    api.validateUrl(url)
+    .catch(error => alert('This is not a valid url'));
+//////////////////////////////////////////
+
+
+
+    const rating = arr[2].value;
+    const title = arr[0].value;
+    const desc = arr[3].value;
+    const id = cuid();
+
+    const obj = store.create(id, title, rating, url, desc);
+    
+    api.createBookmark(obj);
+    const newArr = store.store.bookmarks.push(obj);
+  
+    generateListView(newArr);
+
+});
+
+
+//GENERATE LIST VIEW ON CLICK OF CANCLE BUTTON
+//SWITCH EXPANDED TO FALSE SO ALL ARE CLOSED
+$('header').on('click', '.cxl', (e => { 
+
+    //I RUN THIS CODEE OVER AND OVER> I CAN PUT THIS IN STORE AND USE IT AGAIN
+    store.store.bookmarks.forEach(bookmark => {
+        if (bookmark.expanded === true) {
+            bookmark.expanded = false;
+        }
+    });
+    ///////////////////////////////////////
+
+    generateListView(store.store.bookmarks);
+  
+}))
+
+
+//ADD BUTTON TO NEW BOOKMARK PAGE
+$('header').on('click', '#add', e => {
+    
+    const title = generateTitle();
+    const cxl = generateCxlButton();
+
+    const header = `${title}<div class ='header-buttons'>${cxl}</div>`;
+    const form = generateForms();
+
+    const html = `${form}`;
+
+    render(header, html);
+});
+
+//EDIT BUTTON TO EDIT PAGE
+$('main').on('click', '#edit', event => {
+    event.stopPropagation();
+    const id = $(event.target).closest('.js-bookmark-each').data('id');
+    const object = store.store.bookmarks.find(bookmark => (bookmark.id === id));
+    console.log(id);
+    editPage(object, id);
+});
+
+
+//TOGGLE TO EXPANDED BOOKMARK
+$('main').on('click', '.bookmark-section', e => {
+    const id = $(event.target).closest('.js-bookmark-each').data('id');
+    const toggle = store.store.bookmarks.find(bookmark => (bookmark.id === id));
+
+    if (toggle.expanded === true) {
+        toggle.expanded = false;
+    } else { toggle.expanded = true };
+    generateListView(store.store.bookmarks);
+});
+
+
+//PRESS ENTER TO EXPAND BOOKMARK
 $("main").on('keydown', '.bookmark-section', (e) => {
     if (e.keyCode == 13) {
         const id = $(e.target).children().first().data('id');
@@ -415,51 +504,14 @@ $("main").on('keydown', '.bookmark-section', (e) => {
         if (toggle.expanded === true) {
             toggle.expanded = false;
         } else { toggle.expanded = true };
-        generateListView();
+        generateListView(store.store.bookmarks);
     };
     }
 );
 
-$("header").on('keydown', 'li', (e) => {
-    if(e.keyCode == 13){
-        filterStars(e);
-    }
-});
-
-
-$('li').focus();
-$('button').focus();
-
-
-$('main').on('click', '#edit', event => {
-    event.stopPropagation();
-    const e = $(event.target).closest('.js-bookmark-each').data('id');
-    console.log(e)
-    const object = store.store.bookmarks.find(bookmark => (bookmark.id === e));
-
-    editPage(object);
-});
-
-$('main').submit('#new', submit);
-
-$('header').on('click', 'span', filterStars);
-
-$('header').on('click', '#add', addPage);
-$('header').on('click', '.cxl', handleCxlButton);
-
-$('main').on('click', '.bookmark-section', e => {
-    const id = $(event.target).closest('.js-bookmark-each').data('id');
-    const toggle = store.store.bookmarks.find(bookmark => (bookmark.id === id));
-
-    if (toggle.expanded === true) {
-        toggle.expanded = false;
-    } else { toggle.expanded = true };
-    generateListView();
-});
 
 
 export default {
-    generateListView,
     render,
-    renderFromApi
+    renderFromApi,
 }

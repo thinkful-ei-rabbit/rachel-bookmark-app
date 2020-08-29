@@ -1,6 +1,6 @@
-import cuid from 'cuid';
 
-const store = {
+
+let store = {
     
     bookmarks: [],
     adding: false,
@@ -28,9 +28,9 @@ const findAndUpdate = function (id, newData){
 }
 
 
-const create =  function(title, rating, url, desc){
+const create =  function(id, title, rating, url, desc){
   return {
-    id: cuid(),
+    id,
     title,
     rating,
     url,

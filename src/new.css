@@ -1,0 +1,369 @@
+:root {
+    --lightest-blue: hsl(180, 100%, 95%);
+    --light-blue: #CCFFFF;
+    --dark-blue: hsl(180, 65%, 15%);
+    --star: #CCFF66;
+}
+
+* {
+    box-sizing: border-box;
+    outline: 1px solid red;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: initial;
+    overflow-x: hidden;
+}
+
+body {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    font-family: sans-serif;
+    background-color: var(--lightest-blue);
+    color: var(--dark-blue);
+    width: inherit;
+    height: inherit;
+    padding: 0;
+    margin: 0;
+
+
+
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: inherit;
+    height: 70vh;
+
+
+
+
+}
+
+section, div{
+    width: inherit;
+    padding: 0;
+    margin: 0;
+}
+
+main form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+main form input {
+    padding: 1rem;
+    margin: 1rem;
+}
+
+/* h1 {
+    margin: 0;
+}
+
+h3 {
+    padding: 0;
+    margin: 0;
+} */
+h2{
+    flex: 2;
+    width: 50%;
+}
+
+
+
+main section {
+    border: 1px solid var(--dark-blue);
+    background-color: var(--light-blue);
+
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    
+
+
+}
+
+
+
+
+main section .bookmark {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+main section div{
+    display: flex;
+
+}
+
+main section div h2{
+    flex: 5;
+}
+
+main section .bookmark .expanded-buttons{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+main section div .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+main form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+}
+
+main form div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+main section form .row {
+    display: flex;
+    flex-direction: row;
+    width: inherit;
+
+
+}
+
+main form input {
+    margin: 1rem 3rem;
+    padding: 1rem;
+    background-color: hsl(90, 95%, 95%);
+    color: var(--dark-blue);
+    border: 1px solid var(--dark-blue);
+    align-self: flex-end;
+}
+
+
+
+
+#getId{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+header div ul {
+    list-style: none;
+
+
+}
+
+
+
+
+header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    margin-top: 4%;
+    width: inherit;
+    height: 30vh;
+    flex-wrap: nowrap;
+}
+
+header div {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 4%;
+
+
+}
+
+header .drop-down {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+
+
+
+}
+
+header .drop-down .dropdown {
+    z-index: 1;
+    border: 1px solid var(--dark-blue);
+    background-color: var(--light-blue);
+
+    position: absolute;
+    top: 50px;
+    width: 85px;
+
+}
+
+
+button {
+    width: 85px;
+    height: 40px;
+    border: 1px solid var(--dark-blue);
+    background-color: var(--dark-blue);
+    color: var(--lightest-blue);
+    text-align: center;
+    font-weight: bold;
+    align-self: center;
+    margin: 2%;
+
+}
+
+.submit {
+    color: var(--star)
+}
+
+
+
+main button:active {
+    border: none;
+    outline: none;
+}
+
+main form input {
+    width: 60vw;
+    align-self: flex-end;
+    height: 3vh;
+}
+
+main section div * {
+    flex: 1;
+}
+
+
+.rating>.fill:before {
+    content: "\2605";
+    position: absolute;
+    color: var(--star);
+}
+
+
+.rating>.empty:before {
+    content: "\2605";
+    position: absolute;
+    color: var(--lightest-blue);
+    z-index: -1;
+}
+
+.rating>.fill {
+    color: var(--star);
+    position: relative;
+}
+
+.desc-input {
+    width: 80vw;
+    height: 35vw;
+
+
+}
+
+.bookmark {
+    align-items: center;
+    justify-content: center;
+}
+
+*:focus {
+    outline: var(--star) solid 2px;
+    z-index: 3;
+}
+
+
+li:focus {
+    outline: var(--dark-blue) solid 2px;
+}
+
+.bookmark-section:focus {
+    outline: var(--star) solid 2px;
+}
+
+
+input {
+    z-index: 5;
+}
+
+
+.form-rating {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+}
+
+.rating-section {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+.rating-section input {
+    width: 10px;
+    padding: 0;
+    margin: 0;
+}
+
+.rating-section div {
+    padding: 0;
+    margin: 0;
+}
+
+
+
+
+
+
+
+
+/*MEDIA QUERIES*/
+@media all and (min-width: 600px) {
+
+    html {
+        width: 100vw;
+    }
+
+    main .bookmark-section {
+        width: 90vw;
+
+    }
+
+    header {
+        flex-direction: row;
+    }
+
+}
