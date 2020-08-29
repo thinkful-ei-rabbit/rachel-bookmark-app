@@ -34,18 +34,15 @@ const createBookmark = (content => {
 
 //UPDATE
 const updateBookmark = ((id, updateData) => {
-    const newData = JSON.stringify({ updateData });
-    return fetch(BASE_URL, {
+    const newData = JSON.stringify(updateData);
+    return fetch(`${BASE_URL}/bookmarks/${id}`, {
         method: 'PATCH',
+        mode: 'cors',
         headers: {
             'Content-Type': 'application/json'
         },
         body: newData
-    })
-    .then(res => res.json())
-    .then(data => console.log(data))
-    .catch(error => console.log(error))
-    //modal popup
+    });
 });
 
 

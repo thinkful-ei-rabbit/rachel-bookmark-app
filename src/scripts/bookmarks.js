@@ -24,7 +24,12 @@ const generateFilterButton = function () {
 };
 
 const generateSubmitButton = function () {
-    const submit = '<button type="submit" class = "button">Submit</button>';
+    const submit = '<button type="submit" class ="button submit">Submit</button>';
+    return submit;
+};
+
+const generateEditSubmitButton = function () {
+    const submit = '<button type="submit" class ="button edit-submit">Submit</button>';
     return submit;
 };
 
@@ -44,11 +49,11 @@ const generateEditButton = () => {
 };
 
 const generateFilterWithDropDown = function () {
-    const five = generateStarRating(5);
-    const four = generateStarRating(4);
-    const three = generateStarRating(3);
-    const two = generateStarRating(2);
-    const one = generateStarRating(1);
+    const five = store.generateStarRating(5);
+    const four = store.generateStarRating(4);
+    const three = store.generateStarRating(3);
+    const two = store.generateStarRating(2);
+    const one = store.generateStarRating(1);
     const filterButton = generateFilterButton();
     const filter =
         `<div class = 'drop-down'>${filterButton}
@@ -68,11 +73,11 @@ const generateFilterWithDropDown = function () {
 const generateForms = function () {
     const submit = generateSubmitButton();
 
-    const five = generateStarRating(5);
-    const four = generateStarRating(4);
-    const three = generateStarRating(3);
-    const two = generateStarRating(2);
-    const one = generateStarRating(1);
+    const five = store.generateStarRating(5);
+    const four = store.generateStarRating(4);
+    const three = store.generateStarRating(3);
+    const two = store.generateStarRating(2);
+    const one = store.generateStarRating(1);
 
     const forms = ` <form id="new">
     <div class = 'form-item'>
@@ -129,8 +134,7 @@ const editPage = ((object, id) => {
     const header = `${ title } <div class='header-buttons'>${cxl}</div>`;
     const form = generateEditForm(object);
 
-    const html = `<div id="getId" data-id=${id} ${ form }</div> `;
-    console.log(html)
+    const html = `<div id="getId" data-id=${id} ${form}</div> `;
 
     render(header, html);
 });
@@ -140,25 +144,29 @@ const editPage = ((object, id) => {
 const generateEditForm = function (object) {
 
     let currentTitle = object.title;
-    let currentUrl = object.url;
     let currentDesc = object.desc;
-    const submit = generateSubmitButton();
+    let value = "";
+
+    if (currentDesc === ''){
+        value = "placeholder ='Add description here'";
+    } else {
+        value = `value = ${currentDesc}`;
+    }
+
+    const submit = generateEditSubmitButton();
     const del = generateDeleteButton();
 
-    const forms = `<form id = "edit">
+    const forms = `<form id="edit">
     <div class='form-item'>
-        <label for="name">Title:</label>
-        <input autofocus="on" id="name" type="text" name="name" class="input-name" value="${currentTitle}" required />
+        <label for="title">Title:</label>
+        <input autofocus="on" id="name" type="text" name="title" class="input-name" value="${currentTitle}" required />
     </div>
-    <div class='form-item'>
-        <label for="url">Url:</label>
-        <input type="text" id="url" name="url" class="input-url" value="${currentUrl}" />
-    </div>
+    
     <div class='form-item'>
     </div>
     <lable for="desc"></lable>
-    <input type="text" id="desc-edit" name="desc" class="desc-input" value="${currentDesc}">
-       <div class = 'form-item'>${submit}${del}</div></div>
+    <input type="text" id="desc-edit" name="desc" class="desc-input" ${value}>
+      ${submit}${del}</div>
         
 </form>
 
@@ -220,7 +228,7 @@ const generateBookmarks = function (arr) {
     const bookmarks = arr.map(bookmark => {
         const num = parseInt(bookmark.rating);
 
-        const rating = generateStarRating(num);
+        const rating = store.generateStarRating(num);
         const edit = generateEditButton();
 
         let expandedContent = '';
@@ -253,68 +261,14 @@ const generateBookmarks = function (arr) {
     return htmlString;
 };
 
+//GENERATE ERROR MESSAGE ON FORM
+const generateErrorMessage = (error) => {
+    const header = '';
+    const cxl = generateCxlButton();
+    const html = `${error}${cxl}`;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-///////////////////////////////////////////////////////
-//SHOULD I MOVE THIS SECTION TO ANOTHER PAGE????
-const generateStarRating = (num) => {
-
-    const starFilled = '<span class = "fill">☆</span>';
-    const starEmpty = '<span class = "empty">☆</span>';
-    let rating = '';
-    switch (num) {
-        case 1:
-            rating = `${starFilled}${starEmpty}${starEmpty}${starEmpty}${starEmpty}`;
-            break;
-        case 2:
-            rating = `${starFilled}${starFilled}${starEmpty}${starEmpty}${starEmpty}`;
-            break;
-        case 3:
-            rating = `${starFilled}${starFilled}${starFilled}${starEmpty}${starEmpty}`;
-            break;
-        case 4:
-            rating = `${starFilled}${starFilled}${starFilled}${starFilled}${starEmpty}`;
-            break;
-        case 5:
-            rating = `${starFilled}${starFilled}${starFilled}${starFilled}${starFilled}`;
-            break;
-    }
-
-    return `<div class = 'rating'>${rating}</div>`;
-};
-
-////////////////////////////////////////////////////////
-
-
-
-
-
+    render(header, html);
+ }
 
 
 
@@ -360,20 +314,21 @@ $('main').on('click', '.delete', e => {
     e.preventDefault();
     e.stopPropagation();
 
-
     const id = $(e.target).parents('#getId').data('id');
 
     const newStore = store.store.bookmarks.filter(bookmark => (bookmark.id !== id))
     
     store.store.bookmarks = [...newStore];
     api.deleteBookmark(id)
-        .then(res => res.json())
-        .then(data => console.log(data))
-        .catch(error => generateErrorMessage(error))
-    
-    ;
-    
-    generateListView();
+    .then(res => {
+        if(!res.ok){
+           let data = res.json();
+           return generateErrorMessage(`<h2 class='error-header'>Bookmark could not be deleted: </h2><p class='error-message'> ${data.message}</p>`)
+        } else {
+            return generateListView(newStore);
+        }
+    })
+    .catch(err => console.log(err));
     
 })
 
@@ -402,28 +357,40 @@ $('header').on('click', 'span', filterStars);
 
 
 
-
-
-
-
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    //get id of element needing to be deleted with parent method
-    $('main').submit('#submit', e => {
+//HANDLES SUBMISSION AND UPDATES BOOKMARK
+    $('main').on('click', '.edit-submit', e => {
         e.preventDefault();
-        e.stopPropagation();
-    
         const id = $(e.target).parents('#getId').data('id');
-        //check for equivalent values
-        //get values 
+
+        const bookmark = store.store.bookmarks.find(item => item.id === id);
+
+        let newTitle = $('input[name=title]').val();
+        let newDesc = $('input[name=desc]').val();
+
+        let obj= {
+            title : newTitle,
+            desc : newDesc
+        }
+
+        api.updateBookmark(id, obj)
+        .then(res => {
+            if(res.ok){
+                bookmark.title = newTitle;
+                bookmark.desc = newDesc;
+
+                return generateListView(store.store.bookmark);
+            }
+        })
+    .catch(err => generateErrorMessage(`<h2 class='error-header'>Bookmark could not edited: </h2><p class='error-message'> ${err}</p>`));
     
     });
 
-///////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
 
 //SUBMIT NEW FORM AND SERIALIZE ARRAY
 //GET VALUES FROM ARRAY TO CREATE BOOKMARK OBJECT
@@ -441,6 +408,7 @@ $('main').submit('#new',  event => {
     //go back to validating 
 
     const obj = store.create(id, title, rating, url, desc);
+    console.log(obj);
  
     api.createBookmark(obj)
     .then(res => {
@@ -457,33 +425,18 @@ $('main').submit('#new',  event => {
 
 });
 
-const generateErrorMessage = (error) => {
-    const header = '';
-    const cxl = generateCxlButton();
-    const html = `${error}${cxl}`;
 
-    render(header, html);
-     
-    // setTimeout(generateListView(store.store.bookmarks), 2000);
-     // $('main').on('click', '.cxl', clearTimeout(timeout));
- 
-
- 
- }
 
 
 //GENERATE LIST VIEW ON CLICK OF CANCLE BUTTON
+//SET TO BODY TO WORK WITH FORM AND ERROR MESSAGE
 //SWITCH EXPANDED TO FALSE SO ALL ARE CLOSED
 $('body').on('click', '#cxl', (e => { 
-
-    //I RUN THIS CODEE OVER AND OVER> I CAN PUT THIS IN STORE AND USE IT AGAIN
     store.store.bookmarks.forEach(bookmark => {
         if (bookmark.expanded === true) {
             bookmark.expanded = false;
         }
     });
-    ///////////////////////////////////////
-
     generateListView(store.store.bookmarks);
   
 }))
@@ -508,7 +461,6 @@ $('main').on('click', '#edit', event => {
     event.stopPropagation();
     const id = $(event.target).closest('.js-bookmark-each').data('id');
     const object = store.store.bookmarks.find(bookmark => (bookmark.id === id));
-    console.log(id);
     editPage(object, id);
 });
 

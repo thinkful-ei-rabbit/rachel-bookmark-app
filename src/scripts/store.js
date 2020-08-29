@@ -39,13 +39,41 @@ const create =  function(id, title, rating, url, desc){
   }
 }
 
+const generateStarRating = (num) => {
+
+  const starFilled = '<span class = "fill">☆</span>';
+  const starEmpty = '<span class = "empty">☆</span>';
+  let rating = '';
+  switch (num) {
+      case 1:
+          rating = `${starFilled}${starEmpty}${starEmpty}${starEmpty}${starEmpty}`;
+          break;
+      case 2:
+          rating = `${starFilled}${starFilled}${starEmpty}${starEmpty}${starEmpty}`;
+          break;
+      case 3:
+          rating = `${starFilled}${starFilled}${starFilled}${starEmpty}${starEmpty}`;
+          break;
+      case 4:
+          rating = `${starFilled}${starFilled}${starFilled}${starFilled}${starEmpty}`;
+          break;
+      case 5:
+          rating = `${starFilled}${starFilled}${starFilled}${starFilled}${starFilled}`;
+          break;
+  }
+
+  return `<div class = 'rating'>${rating}</div>`;
+};
+
+
 
 export default{
   store,
   addBookmark,
   findAndUpdate,
   findById,
-  create
+  create,
+  generateStarRating
 };
 
 

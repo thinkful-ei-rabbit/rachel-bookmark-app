@@ -7,9 +7,15 @@ import '../index.css';
 function main() {
 
    api.getBookmark()
-   .then(res => res.json())
-   .then(data => bookmarks.renderFromApi(data))
-   .catch(error => bookmarks.generateErrorMessage(error));
+   .then(res => {
+      if(!res.ok){
+         return bookmarks.generateErrorMessage(`<h2 class='error-header'>Bookmarks could not be found</h2><p class='error-message'> Please try adding a bookmark</p>`)
+      } else {
+          return res.json()
+      }
+  })
+  .then(data => bookmarks.renderFromApi(data))
+  .catch(err => bookmarks.generateErrorMessage(`<h2 class='error-header'>Bookmarks could not be found</h2><p>${err}</p>`));
 
 }
 
