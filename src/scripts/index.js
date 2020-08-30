@@ -11,7 +11,6 @@ function main() {
       if(!res.ok){
          return bookmarks.generateErrorMessage(`<h2 class='error-header'>Bookmarks could not be found</h2><p class='error-message'> Please try adding a bookmark</p>`)
       } else {
-         store.store.error='null';
           return res.json()
       }
   })

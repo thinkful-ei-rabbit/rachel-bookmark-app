@@ -6,11 +6,6 @@ import api from './api';
 
 
 
-//SWITCH ERROR TO ERROR STATE!!!!
-//ADD CONTENT TO NORMAL FORM MATERIAL
-//IF TRUE
-
-
 //GENERATE BUTTONS AND HEADER CONTENT
 const generateTitle = (() => {
     const title = '<h1 tabindex="-1">Bookmarks</h1>';
@@ -335,7 +330,7 @@ $('main').on('click', '.delete', e => {
             return generateListView(newStore);
         }
     })
-    .catch(err => console.log(err));
+    .catch(err => generateErrorMessage(`<h2 class='error-header'>Bookmark could not be deleted: </h2><p class='error-message'> ${err}</p>`))
     
 })
 
@@ -386,9 +381,12 @@ $('header').on('click', 'span', filterStars);
                 bookmark.desc = newDesc;
 
                 return generateListView(store.store.bookmark);
+            } else {
+                let data =  res.json();
+                return generateErrorMessage(`<h2 class='error-header'>Bookmark could not edited: </h2><p class='error-message'> ${data.message}</p>`)
             }
         })
-    .catch(err => generateErrorMessage(`<h2 class='error-header'>Bookmark could not edited: </h2><p class='error-message'> ${err}</p>`));
+        .catch(err => generateErrorMessage(`<h2 class='error-header'>Bookmark could not edited: </h2><p class='error-message'> ${err}</p>`));
     
     });
 
@@ -405,7 +403,7 @@ $('header').on('click', 'span', filterStars);
 $('main').submit('#new',  event => {
     const arr = ($(event.target).serializeArray());
     event.preventDefault();
-    console.log(arr);
+
     const url = arr[1].value;
     const rating = arr[2].value;
     const title = arr[0].value;
@@ -415,7 +413,7 @@ $('main').submit('#new',  event => {
     //go back to validating 
 
     const obj = store.create(id, title, rating, url, desc);
-    console.log(obj);
+
  
     api.createBookmark(obj)
     .then(res => {
@@ -427,7 +425,7 @@ $('main').submit('#new',  event => {
             }
         })
     .then(data => generateErrorMessage(`<h2 class='error-header'>Bookmark could not be saved: </h2><p class='error-message'> ${data.message}</p>`))
-    .catch(err => console.log(err));
+    .catch(err => generateErrorMessage(`<h2 class='error-header'>Bookmark could not be saved: </h2><p class='error-message'> ${err}</p>`));
     
 
 });
