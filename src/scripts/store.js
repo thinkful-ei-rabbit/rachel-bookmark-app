@@ -3,14 +3,11 @@
 let store = {
     
     bookmarks: [],
-    adding: false,
     error: null,
     filter: 0,
     showDropDown: true,
     filtered: false
 };
-
-
 
 const findById = function (id) {
   return this.store.bookmarks.find(currentBookmark => currentBookmark.id === id);
@@ -22,9 +19,8 @@ const addBookmark = function (bookmark){
   this.store.bookmarks.push(bookmark);
 }
 
-const findAndUpdate = function (id, newData){
-  const currentBookmark = this.findById(id);
-  Object.assign(currentBookmark, newData);
+const filterBookmarks = function (num){
+  return store.bookmarks.filter(bookmark => bookmark.rating >= num)
 }
 
 
@@ -70,8 +66,8 @@ const generateStarRating = (num) => {
 export default{
   store,
   addBookmark,
-  findAndUpdate,
   findById,
+  filterBookmarks,
   create,
   generateStarRating
 };

@@ -5,6 +5,12 @@ import store from './store';
 import api from './api';
 
 
+
+//SWITCH ERROR TO ERROR STATE!!!!
+//ADD CONTENT TO NORMAL FORM MATERIAL
+//IF TRUE
+
+
 //GENERATE BUTTONS AND HEADER CONTENT
 const generateTitle = (() => {
     const title = '<h1 tabindex="-1">Bookmarks</h1>';
@@ -80,7 +86,7 @@ const generateForms = function () {
     const one = store.generateStarRating(1);
 
     const forms = ` <form id="new">
-    <div class = 'form-item'>
+    <div class = ''>
     <label for="name">Title:</label>
     <input autofocus="on" id="name" type="text" name="name" class="input-name" required />
     </div>
@@ -134,7 +140,7 @@ const editPage = ((object, id) => {
     const header = `${ title } <div class='header-buttons'>${cxl}</div>`;
     const form = generateEditForm(object);
 
-    const html = `<div id="getId" data-id=${id} ${form}</div> `;
+    const html = `<div id="getId" data-id=${id}> ${form}</div> `;
 
     render(header, html);
 });
@@ -166,7 +172,7 @@ const generateEditForm = function (object) {
     </div>
     <lable for="desc"></lable>
     <input type="text" id="desc-edit" name="desc" class="desc-input" ${value}>
-      ${submit}${del}</div>
+      <div class='row'>${submit}${del}</div></div>
         
 </form>
 
@@ -187,7 +193,7 @@ const generateListView = function (arr) {
         filter = generateFilterButton();
     };
 
-    const header = `${title}<div class ='header-buttons'>${add}${filter}</div>`;
+    const header = `<div class="col">${title}<div class ='header-buttons row'>${add}${filter}</div></div>`;
     const bookmarks = generateBookmarks(store.store.bookmarks);
     render(header, bookmarks);
 };
@@ -198,7 +204,8 @@ const filterStars = (event) => {
     const selected = $(event.currentTarget)
         .closest('li')
         .data('id');
-    const filter = store.store.bookmarks.filter(bookmark => bookmark.rating >= selected);
+        
+    const filter = store.filterBookmarks(selected);
     generateFilteredView(filter);
 }
 
@@ -215,7 +222,7 @@ const generateFilteredView = function (arr) {
         filter = generateFilterButton();
     };
 
-    const header = `${title}<div class ='header-buttons'>${add}${filter}</div>`;
+    const header = `${title}<div class ='header-buttons row'>${add}${filter}</div>`;
     const bookmarks = generateBookmarks(arr);
     render(header, bookmarks);
 };
@@ -238,17 +245,17 @@ const generateBookmarks = function (arr) {
             } else {
                 expandedContent = `<div class= "bookmark-full">
                 <div class='desc'><p>${bookmark.desc}</p></div>
-                <div class='expanded-buttons'><a target = "_blank" href=${bookmark.url}><button class = 'visit button' type = 'button'>Visit site</button></a>
+                <div class='expanded-buttons'><div class="row><a target = "_blank" href=${bookmark.url}><button class = 'visit button' type = 'button'>Visit site</button></a>
                     ${edit}
-            </div></div>`
+            </div></div></div>`
             }
             
         
         return `
         <section class = "bookmark-section" tabindex="0">
            <div data-id="${bookmark.id}" class ="js-bookmark-each" >
-            <h2>${bookmark.title}</h2>
-                <div class="rating">
+           <div class="row">
+           <h2>${bookmark.title}</h2>
                 ${rating}
             </div>
                 ${expandedContent}
@@ -362,7 +369,7 @@ $('header').on('click', 'span', filterStars);
         e.preventDefault();
         const id = $(e.target).parents('#getId').data('id');
 
-        const bookmark = store.store.bookmarks.find(item => item.id === id);
+        const bookmark = store.findById(id);
 
         let newTitle = $('input[name=title]').val();
         let newDesc = $('input[name=desc]').val();
@@ -398,7 +405,7 @@ $('header').on('click', 'span', filterStars);
 $('main').submit('#new',  event => {
     const arr = ($(event.target).serializeArray());
     event.preventDefault();
-
+    console.log(arr);
     const url = arr[1].value;
     const rating = arr[2].value;
     const title = arr[0].value;
@@ -413,7 +420,7 @@ $('main').submit('#new',  event => {
     api.createBookmark(obj)
     .then(res => {
             if(res.ok){
-                const newArr = store.store.bookmarks.push(obj);
+                const newArr = store.addBookmark(obj);
                 return generateListView(newArr);
             } else {
                 return res.json()
@@ -460,7 +467,7 @@ $('header').on('click', '#add', e => {
 $('main').on('click', '#edit', event => {
     event.stopPropagation();
     const id = $(event.target).closest('.js-bookmark-each').data('id');
-    const object = store.store.bookmarks.find(bookmark => (bookmark.id === id));
+    const object = store.findById(id);
     editPage(object, id);
 });
 
@@ -468,7 +475,7 @@ $('main').on('click', '#edit', event => {
 //TOGGLE TO EXPANDED BOOKMARK
 $('main').on('click', '.bookmark-section', e => {
     const id = $(event.target).closest('.js-bookmark-each').data('id');
-    const toggle = store.store.bookmarks.find(bookmark => (bookmark.id === id));
+    const toggle = store.findById(id);
 
     if (toggle.expanded === true) {
         toggle.expanded = false;
@@ -482,7 +489,7 @@ $("main").on('keydown', '.bookmark-section', (e) => {
     if (e.keyCode == 13) {
         const id = $(e.target).children().first().data('id');
 
-        const toggle = store.store.bookmarks.find(bookmark => (bookmark.id === id));
+        const toggle = store.findById(id);
         if (toggle.expanded === true) {
             toggle.expanded = false;
         } else { toggle.expanded = true };
